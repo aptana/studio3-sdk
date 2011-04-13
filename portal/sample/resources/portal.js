@@ -5,9 +5,11 @@ var Portal = Class.create({
   initialize: function() {
     this.preferences  = new Preferences();
     this.views = new Views();
+    this.commands = new Commands();
     // Render any preferences-related items.
     this.preferences.render();
     this.views.render();
+    this.commands.render();
   }
 });
 

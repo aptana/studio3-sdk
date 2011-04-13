@@ -1,11 +1,10 @@
 Views = Class.create({
     /**
-     * Render the items that are attached to the studio preferences.
+     * Render the items that will open a studio's view.
      */
     render: function() {
-        // Get the items that should be controlling/diaplaying the preference item.
+        // Get the div for the Open-View example
         viewExampleDiv = $('openViewId');
-        // For each control, get the
         with (Elements.Builder) {
             elm = a({'href' : '#'}, "Open Bookmarks View");
             viewExampleDiv.appendChild(elm);
