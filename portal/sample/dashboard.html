@@ -1,17 +1,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
-    <head><meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>Studio | Start Page</title>
-        <script src="resources/prototype.js" type="text/javascript"></script>
-        <script src="resources/elements.js" type="text/javascript"></script>
-        <script src="resources/preferences.js" type="text/javascript"></script>
-        <script src="resources/portal.js" type="text/javascript"></script>
-    </head>
-    
-    <body onload="loadPortal(false)">
-        <div id="toolboxPref" class='preference checkbox' text='Load the Dashboard on startup' key='open_dashboard'>
-        </div>
-    </body>
-
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Studio | Start Page</title>
+		<script src="resources/prototype.js" type="text/javascript"></script>
+		<script src="resources/elements.js" type="text/javascript"></script>
+		<script src="resources/preferences.js" type="text/javascript"></script>
+		<script src="resources/views.js" type="text/javascript"></script>
+		<script src="resources/portal.js" type="text/javascript"></script>
+	</head>
+	<body onload="loadPortal(false)">
+		<!-- Open a view -->
+		<div>Open a view example ('Bookmarks View')</div>
+		<div id="openViewId"></div>
+		<br>
+		<!-- Studio preferences interaction -->
+		<div id="toolboxPref" class='preference checkbox' text='Load the Dashboard on startup' key='open_dashboard'></div>
+	</body>
 </html>
