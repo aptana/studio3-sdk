@@ -146,8 +146,8 @@
 
 <xsl:template match="@location">
 	<xsl:attribute name="type">
-   <xsl:value-of select="." />
- </xsl:attribute>
+        <xsl:value-of select="." />
+    </xsl:attribute>
 </xsl:template>
 
 <xsl:template match="@scope">
@@ -177,11 +177,42 @@
 	<xsl:choose>
 		<xsl:when test="string-length(.) = 0">
 			<xsl:attribute name="type">
-       <xsl:text>Object</xsl:text>
-     </xsl:attribute>
+            	<xsl:text>Object</xsl:text>
+            </xsl:attribute>
+		</xsl:when>
+		<xsl:when test="substring(., string-length(.)) = ':' or substring(., string-length(.)) = ',' or substring(., string-length(.)) = ')' or substring(., string-length(.)) = '.' or substring(., string-length(.)) = '&quot;'">
+			<xsl:attribute name="type">
+				<xsl:value-of select="substring(., 1, string-length(.) - 1)"/>
+			</xsl:attribute>
+		</xsl:when>
+		<xsl:when test="starts-with(., 'function(')">
+			<xsl:attribute name="type">
+				<xsl:value-of select="concat('Function(', substring(., 10))"/>
+			</xsl:attribute>
+		</xsl:when>
+		<xsl:when test="contains(., '||')">
+			<xsl:attribute name="type">
+				<xsl:call-template name="reducePipes">
+					<xsl:with-param name="item" select="."/>
+				</xsl:call-template>
+			</xsl:attribute>
 		</xsl:when>
 		<xsl:otherwise>
 			<xsl:copy-of select="." />
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:template>
+
+<xsl:template name="reducePipes">
+	<xsl:param name="item"/>
+	<xsl:choose>
+		<xsl:when test="contains($item, '||')">
+			<xsl:call-template name="reducePipes">
+				<xsl:with-param name="item" select="concat(substring-before($item, '||'), '|', substring-after($item, '||'))"/>
+			</xsl:call-template>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="$item"/>
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
