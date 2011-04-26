@@ -3,7 +3,7 @@
 	@author Kevin Lindsey
     @author Ingo Muschenetz
 	
-	Convert a malformed Dojo 1.6 ScriptDoc XML file to the ScriptDoc XML schema. Below is a summary of what this stylesheet transforms:
+	Convert a Dojo 1.6 api.xml file to the ScriptDoc XML schema. Below is a summary of what this stylesheet transforms:
 	
 	1. There are no @constructor or @super attributes on method elements, so these were stripped
 	2. Method elements that have @constructor attributes are skipped for now. These should probably be converted to constructor elements
@@ -14,6 +14,7 @@
 	7. A number of @scope attributes were defined but were empty. Those have been changed to "instance"
     7. @scope="normal" and @scope="prototype" attributes were converted to @scope="instance"
 	8. A number of @location attributes were defined but were empty. Those have been changed to "Object"
+	9. Ignore provides, provide, examples, and example
 	
 	You can run this on the Mac using the following:
 	
@@ -36,6 +37,12 @@
 	<xsl:copy-of select="." />
 </xsl:template>
 
+<xsl:template match="examples">
+	<xsl:copy>
+		<xsl:apply-templates select="example" />
+	</xsl:copy>
+</xsl:template>
+
 <xsl:template match="javascript">
 	<xsl:copy>
 		<xsl:apply-templates select="object" />
@@ -46,16 +53,27 @@
 	<xsl:if test="not(@constructor)">
 		<xsl:copy>
 			<!--
-				<xsl:apply-templates select="@constructor"/> <xsl:apply-templates
-				select="@super"/>
+			<xsl:apply-templates select="@constructor"/>
 			-->
 			<xsl:apply-templates select="@name" />
 			<xsl:apply-templates select="@scope" />
+			<!--
+			<xsl:apply-templates select="@private" />
+			<xsl:apply-templates select="@privateparent" />
+			<xsl:apply-templates select="@tags" />
+			-->
 			<xsl:apply-templates select="description" />
-			<xsl:apply-templates select="example" />
+			<xsl:apply-templates select="examples" />
 			<xsl:apply-templates select="parameters" />
+			<!--
+			<xsl:apply-templates select="provides" />
+			<xsl:apply-templates select="resources" />
+			-->
 			<xsl:apply-templates select="return-description" />
 			<xsl:apply-templates select="return-types" />
+			<!--
+			<xsl:apply-templates select="summary" />
+			-->
 		</xsl:copy>
 	</xsl:if>
 </xsl:template>
@@ -83,8 +101,13 @@
 <xsl:template match="object">
 	<xsl:element name="class">
 		<!--
-			<xsl:apply-templates select="@classlike"/> <xsl:apply-templates
-			select="@type"/>
+		<xsl:apply-templates select="@classlike"/>
+		<xsl:apply-templates select="@location"/>
+		<xsl:apply-templates select="@private"/>
+		<xsl:apply-templates select="@privateparent"/>
+		<xsl:apply-templates select="@superclass"/>
+		<xsl:apply-templates select="@tags"/>
+		<xsl:apply-templates select="@type"/>
 		-->
 		<xsl:apply-templates select="@location" />
 		<xsl:apply-templates select="@superclass" />
@@ -93,6 +116,14 @@
 		<xsl:apply-templates select="methods" />
 		<xsl:apply-templates select="mixins" />
 		<xsl:apply-templates select="properties" />
+		<!--
+		<xsl:apply-templates select="parameters" />
+		<xsl:apply-templates select="provides" />
+		<xsl:apply-templates select="resources" />
+		<xsl:apply-templates select="return-description" />
+		<xsl:apply-templates select="return-types" />
+		<xsl:apply-templates select="summary" />
+		-->
 	</xsl:element>
 </xsl:template>
 
@@ -101,7 +132,7 @@
 		<xsl:apply-templates select="@name" />
 		<xsl:apply-templates select="@type" />
 		<xsl:apply-templates select="@usage" />
-		<xsl:apply-templates select="description" />
+		<xsl:apply-templates select="summary" />
 	</xsl:copy>
 </xsl:template>
 
@@ -122,8 +153,33 @@
 		<xsl:apply-templates select="@name" />
 		<xsl:apply-templates select="@scope" />
 		<xsl:apply-templates select="@type" />
-		<xsl:apply-templates select="description" />
+		<!--
+		<xsl:apply-templates select="@private" />
+		<xsl:apply-templates select="@privateparent" />
+		<xsl:apply-templates select="@tags" />
+		-->
+		<xsl:apply-templates select="summary" />
+		<!--
+		<xsl:apply-templates select="provides" />
+		<xsl:apply-templates select="resources" />
+		-->
 	</xsl:copy>
+</xsl:template>
+
+<xsl:template match="provide">
+	<!-- ignore -->
+</xsl:template>
+
+<xsl:template match="provides">
+	<!-- ignore -->
+</xsl:template>
+
+<xsl:template match="resource">
+	<!-- ignore -->
+</xsl:template>
+
+<xsl:template match="resources">
+	<!-- ignore -->
 </xsl:template>
 
 <xsl:template match="return-description">
@@ -140,6 +196,12 @@
 	<xsl:copy>
 		<xsl:apply-templates select="return-type" />
 	</xsl:copy>
+</xsl:template>
+
+<xsl:template match="summary">
+	<description>
+		<xsl:value-of select="text()"/>
+	</description>
 </xsl:template>
 
 <!-- attribute templates -->
@@ -174,35 +236,32 @@
 </xsl:template>
 
 <xsl:template match="@type">
-	<xsl:choose>
-		<xsl:when test="string-length(.) = 0">
-			<xsl:attribute name="type">
-            	<xsl:text>Object</xsl:text>
-            </xsl:attribute>
-		</xsl:when>
-		<xsl:when test="substring(., string-length(.)) = ':' or substring(., string-length(.)) = ',' or substring(., string-length(.)) = ')' or substring(., string-length(.)) = '.' or substring(., string-length(.)) = '&quot;'">
-			<xsl:attribute name="type">
-				<xsl:value-of select="substring(., 1, string-length(.) - 1)"/>
-			</xsl:attribute>
-		</xsl:when>
-		<xsl:when test="starts-with(., 'function(')">
-			<xsl:attribute name="type">
-				<xsl:value-of select="concat('Function(', substring(., 10))"/>
-			</xsl:attribute>
-		</xsl:when>
-		<xsl:when test="contains(., '||')">
-			<xsl:attribute name="type">
-				<xsl:call-template name="reducePipes">
-					<xsl:with-param name="item" select="."/>
-				</xsl:call-template>
-			</xsl:attribute>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:copy-of select="." />
-		</xsl:otherwise>
-	</xsl:choose>
+	<!-- NOTE: keeping attribute and value in separate statements so we can show the before and after values for the incoming type -->
+	<xsl:variable name="type">
+		<xsl:call-template name="fixupTypes">
+			<xsl:with-param name="item">
+				<xsl:choose>
+					<xsl:when test="contains(., '||')">
+						<xsl:call-template name="reducePipes">
+							<xsl:with-param name="item" select="."/>
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="."/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:with-param>
+		</xsl:call-template>
+	</xsl:variable>
+
+	<xsl:attribute name="type">
+		<xsl:value-of select="$type"/>
+	</xsl:attribute>
 </xsl:template>
 
+<!--
+	Remove all repeated pipe symbols
+-->
 <xsl:template name="reducePipes">
 	<xsl:param name="item"/>
 	<xsl:choose>
@@ -213,6 +272,157 @@
 		</xsl:when>
 		<xsl:otherwise>
 			<xsl:value-of select="$item"/>
+		</xsl:otherwise>
+	</xsl:choose>
+</xsl:template>
+
+<!--
+	Fix all types in a list of types
+-->
+<xsl:template name="fixupTypes">
+	<xsl:param name="item"/>
+	<xsl:variable name="result">
+		<xsl:choose>
+			<xsl:when test="contains($item, '|')">
+				<xsl:variable name="first">
+					<xsl:call-template name="fixupType">
+						<xsl:with-param name="item" select="substring-before($item, '|')"/>
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:variable name="rest">
+					<xsl:call-template name="fixupTypes">
+						<xsl:with-param name="item" select="substring-after($item, '|')"/>
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:value-of select="concat($first, '|', $rest)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="fixupType">
+					<xsl:with-param name="item" select="$item"/>
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
+
+	<!-- show before and after -->
+	<!--xsl:message><xsl:value-of select="concat($item, ' => ', $result, '&#xA;')"/></xsl:message-->
+
+	<xsl:value-of select="$result"/>
+</xsl:template>
+
+<!--
+	Fix a single type
+-->
+<xsl:template name="fixupType">
+	<xsl:param name="item"/>
+	<xsl:variable name="lastChar" select="substring($item, string-length($item))"/>
+	<xsl:choose>
+		<xsl:when test="string-length($item) = 0">
+           	<xsl:text>Object</xsl:text>
+		</xsl:when>
+		<xsl:when test="contains(':;,.&quot;', $lastChar)">
+			<xsl:call-template name="fixupType">
+				<xsl:with-param name="item">
+					<xsl:value-of select="substring($item, 1, string-length($item) - 1)"/>
+				</xsl:with-param>
+			</xsl:call-template>
+		</xsl:when>
+		<xsl:when test="$lastChar = '['">
+			<xsl:value-of select="concat($item, ']')"/>
+		</xsl:when>
+		<xsl:when test="contains($item, '[]')">
+			<xsl:call-template name="fixupType">
+				<xsl:with-param name="item">
+					<xsl:value-of select="concat('Array&lt;', substring-before($item, '[]'), '&gt;', substring-after($item, '[]'))"/>
+				</xsl:with-param>
+			</xsl:call-template>
+		</xsl:when>
+		<xsl:when test="$item = 'Boolean: contents? true : false'">
+			<xsl:text>Boolean</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'Date or null'">
+			<xsl:text>Date</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'new Date(value)'">
+			<xsl:text>Date</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'Function(node'">
+			<xsl:text>Function</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'attribute-name-string'">
+			<xsl:text>String</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'XML string'">
+			<xsl:text>String</xsl:text>
+		</xsl:when>
+		<xsl:when test="starts-with($item, 'String (')">
+			<xsl:text>String</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'Integer/Float'">
+			<xsl:text>Number</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'Number (integer)'">
+			<xsl:text>Number</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'read-only-Number'">
+			<xsl:text>Number</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'Whole Number'">
+			<xsl:text>Number</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'int {-1,0,1}'">
+			<xsl:text>Number</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = '-1'">
+			<xsl:text>Number</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'integer (either 0, 1, or -1)'">
+			<xsl:text>Number</xsl:text>
+		</xsl:when>
+		<xsl:when test="starts-with($item, 'Number or NaN for ')">
+			<xsl:text>Number</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = '?'">
+			<xsl:text>Object</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = &quot;&apos;&apos;&quot;">
+			<xsl:text>Object</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'read-only-Object'">
+			<xsl:text>Object</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'Set&lt;String&gt;'">
+			<xsl:text>Object</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'Hash&lt;String'">
+			<xsl:text>Object</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'Widget(dijit.Menu)'">
+			<xsl:text>dijit.Menu</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'Channel/resource'">
+			<xsl:text>Channel</xsl:text>
+		</xsl:when>
+		<xsl:when test="$item = 'read-only-SWF'">
+			<xsl:text>SWF</xsl:text>
+		</xsl:when>
+		<xsl:when test="starts-with($item, 'StyleSheet or')">
+			<xsl:text>StyleSheet</xsl:text>
+		</xsl:when>
+		<xsl:when test="starts-with($item, '(in)')">
+			<xsl:value-of select="substring($item, 5)"/>
+		</xsl:when>
+		<xsl:when test="starts-with($item, '(out)')">
+			<xsl:value-of select="substring($item, 6)"/>
+		</xsl:when>
+		<xsl:when test="starts-with($item, '(in|out)')">
+			<xsl:value-of select="substring($item, 9)"/>
+		</xsl:when>
+		<xsl:when test="starts-with($item, 'function(')">
+			<xsl:value-of select="concat('Function(', substring($item, 10), ')')"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:value-of select="$item" />
 		</xsl:otherwise>
 	</xsl:choose>
 </xsl:template>
