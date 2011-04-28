@@ -317,9 +317,16 @@
 	<xsl:param name="item"/>
 	<xsl:variable name="lastChar" select="substring($item, string-length($item))"/>
 	<xsl:choose>
+		<!--
+			Map empty types to Object
+		-->
 		<xsl:when test="string-length($item) = 0">
            	<xsl:text>Object</xsl:text>
 		</xsl:when>
+
+		<!--
+			Remove trailing trash characters and further process the result according to the conditions below
+		-->
 		<xsl:when test="contains(':;,.&quot;', $lastChar)">
 			<xsl:call-template name="fixupType">
 				<xsl:with-param name="item">
@@ -327,9 +334,21 @@
 				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:when>
+
+		<!--
+			Add missing closing bracket and further process the result according to the conditions below
+		-->
 		<xsl:when test="$lastChar = '['">
-			<xsl:value-of select="concat($item, ']')"/>
+			<xsl:call-template name="fixupType">
+				<xsl:with-param name="item">
+					<xsl:value-of select="concat($item, ']')"/>
+				</xsl:with-param>
+			</xsl:call-template>
 		</xsl:when>
+
+		<!--
+			Convert Type[] to Array<Type> and further process the result to cover nested cases
+		-->
 		<xsl:when test="contains($item, '[]')">
 			<xsl:call-template name="fixupType">
 				<xsl:with-param name="item">
@@ -337,6 +356,10 @@
 				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:when>
+
+		<!--
+			The following tests basically map strings to a known type
+		-->
 		<xsl:when test="$item = 'Boolean: contents? true : false'">
 			<xsl:text>Boolean</xsl:text>
 		</xsl:when>
@@ -421,6 +444,10 @@
 		<xsl:when test="starts-with($item, 'function(')">
 			<xsl:value-of select="concat('Function(', substring($item, 10), ')')"/>
 		</xsl:when>
+
+		<!--
+			No conversion necessary, so use what we have
+		-->
 		<xsl:otherwise>
 			<xsl:value-of select="$item" />
 		</xsl:otherwise>
