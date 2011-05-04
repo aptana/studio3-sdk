@@ -6,16 +6,15 @@ Commands = Class.create({
         // Get the div for the command-example.
         viewExampleDiv = $('executeCommandId');
         with (Elements.Builder) {
-            elm = div(a({
-                'href' : '#'
-            }, "Command #1 - Open the About dialog"), 
-            br(), 
-            elm2 = a({
-                'href' : '#'
-            }, "Command #2 - Open the Search dialog"));
-            viewExampleDiv.appendChild(elm);
+        	  commands = table(
+        	  	tbody(
+        	  		tr(td(elm1 = a({'href' : '#'}, "Command #1 - Open the About dialog"))),
+        	  		tr(td(elm2 = a({'href' : '#'}, "Command #2 - Open the Search dialog"))),
+        	  		tr(td(elm3 = a({'href' : '#'}, "Command #3 - Command With Parameters - Open the BreakPoints View")))
+        	  ));
+            viewExampleDiv.appendChild(commands);
             // Observe and report selection changes for this item
-            elm.observe('click', function(e) {
+            elm1.observe('click', function(e) {
                 inputElement = e.element();
                 if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
                     console.log("Dispatching the 'execute' action on the 'portal.commands' controller...");
@@ -27,7 +26,6 @@ Commands = Class.create({
                 }
                 return false;
             });
-            viewExampleDiv.appendChild(elm2);
             // Observe and report selection changes for this item
             elm2.observe('click', function(e) {
                 inputElement = e.element();
@@ -37,6 +35,20 @@ Commands = Class.create({
                         controller : 'portal.commands',
                         action : "execute",
                         args : ["org.eclipse.search.ui.openSearchDialog"].toJSON()
+                    }).toJSON());
+                }
+                return false;
+            });
+            // Observe and report selection changes for this item
+            // NOTE: This one is a command with parameters
+            elm3.observe('click', function(e) {
+                inputElement = e.element();
+                if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
+                    console.log("Dispatching the 'execute' action (with parameters) on the 'portal.commands' controller...");
+                    dispatch($H({
+                        controller : 'portal.commands',
+                        action : "execute",
+                        args : ["org.eclipse.ui.views.showView", {"org.eclipse.ui.views.showView.viewId" : "org.eclipse.debug.ui.BreakpointView"}].toJSON()
                     }).toJSON());
                 }
                 return false;
