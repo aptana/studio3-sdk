@@ -1,15 +1,31 @@
 /**
+ * This script manages the portal observer-observable event mechanism.
+ */
+// Constants
+var Events = {RECENT_FILES : 'recentFiles'};
+// Creates the eventsDispatcher which contains the notify() function.
+// IMPORTANT! The Studio expects the observable to be called 'eventsDispatcher', and 
+// expects the eventsDispatcher function to be called 'notify()'. Do not change these names.
+var eventsDispatcher = new Observable();
+
+/**
  * The Portal class
  */
 var Portal = Class.create({
   initialize: function() {
+		// Create the UI parts and render them
     this.preferences  = new Preferences();
     this.views = new Views();
     this.commands = new Commands();
-    // Render any preferences-related items.
+    this.recentFiles = new RecentFiles();
+    
     this.preferences.render();
     this.views.render();
     this.commands.render();
+    this.recentFiles.render();
+    
+    // Add a recent-files observer to the dispatcher. Render the recent files list on a 'recentFiles' event.
+    eventsDispatcher.addObserver(Events.RECENT_FILES, function(e) { portal.recentFiles.render(); });
   }
 });
 
