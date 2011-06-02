@@ -11,7 +11,9 @@ Commands = Class.create({
         	  		tr(td(elm1 = a({'href' : '#'}, "Command #1 - Open the About dialog"))),
         	  		tr(td(elm2 = a({'href' : '#'}, "Command #2 - Open the Search dialog"))),
         	  		tr(td(elm3 = a({'href' : '#'}, "Command #3 - Command With Parameters - Open the BreakPoints View"))),
-        	  		tr(td(elm4 = a({'href' : '#'}, "Command #4 - Open a 'New Web Project' wizard")))
+        	  		tr(td(elm4 = a({'href' : '#'}, "Command #4 - Open a 'New Web Project' wizard"))),
+					tr(td(elm5 = a({'href' : '#'}, "Command #5 - Open a 'New Titanium Desktop Project' wizard"))),
+					tr(td(elm6 = a({'href' : '#'}, "Command #6 - Open a 'New Titanium Mobile Project' wizard")))
         	  ));
             viewExampleDiv.appendChild(commands);
             // Observe and report selection changes for this item
@@ -67,6 +69,40 @@ Commands = Class.create({
                         controller : 'portal.commands',
                         action : "execute",
                         args : ["org.eclipse.ui.newWizard", {"newWizardId" : "com.aptana.ui.wizards.NewWebProject"}].toJSON()
+                    }).toJSON());
+                }
+                return false;
+            });
+            // Observe and report selection changes for this item
+            // NOTES: 
+            // -- This one is a command with parameters
+            // -- "com.appcelerator.titanium.desktop.project_wizard" - Titanium Studio Desktop project wizard ID
+            // -- "com.appcelerator.titanium.mobile.project_wizard" - Titanium Studio Mobile project wizard ID
+            elm5.observe('click', function(e) {
+                inputElement = e.element();
+                if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
+                    console.log("Dispatching the 'execute' action (with parameters) on the 'portal.commands' controller...");
+                    dispatch($H({
+                        controller : 'portal.commands',
+                        action : "execute",
+                        args : ["org.eclipse.ui.newWizard", {"newWizardId" : "com.appcelerator.titanium.desktop.project_wizard"}].toJSON()
+                    }).toJSON());
+                }
+                return false;
+            });
+            // Observe and report selection changes for this item
+            // NOTES: 
+            // -- This one is a command with parameters
+            // -- "com.appcelerator.titanium.desktop.project_wizard" - Titanium Studio Desktop project wizard ID
+            // -- "com.appcelerator.titanium.mobile.project_wizard" - Titanium Studio Mobile project wizard ID
+            elm6.observe('click', function(e) {
+                inputElement = e.element();
+                if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
+                    console.log("Dispatching the 'execute' action (with parameters) on the 'portal.commands' controller...");
+                    dispatch($H({
+                        controller : 'portal.commands',
+                        action : "execute",
+                        args : ["org.eclipse.ui.newWizard", {"newWizardId" : "com.appcelerator.titanium.mobile.project_wizard"}].toJSON()
                     }).toJSON());
                 }
                 return false;
