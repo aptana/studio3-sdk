@@ -17,11 +17,13 @@ var Portal = Class.create({
     this.preferences  = new Preferences();
     this.views = new Views();
     this.commands = new Commands();
+    this.browserInteractions = new Browser();
     this.recentFiles = new RecentFiles();
     
     this.preferences.render();
     this.views.render();
     this.commands.render();
+    this.browserInteractions.render();
     this.recentFiles.render();
     
     // Add a recent-files observer to the dispatcher. Render the recent files list on a 'recentFiles' event.
