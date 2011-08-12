@@ -2,7 +2,7 @@
 <settings id="workspace" codepro_version="7.0.0.r36x201009141310" platform_id="org.eclipse.ui">
 	<!--
 		Exported using EclipsePro Audit 7.0.0.r36x201009141335
-		Tue Aug 09 09:32:58 PDT 2011
+		Fri Aug 12 11:30:23 PDT 2011
 	-->
 	<plugin id="com.instantiations.assist.eclipse.analysis" version="7.0.0.r36x201009141310">
 		<category id="codepro.code.audit">
@@ -13,7 +13,7 @@
 							<null/>
 						</resourceFilter>
 					
-						#Tue Aug 09 09:32:58 PDT 2011
+						#Fri Aug 12 11:30:23 PDT 2011
 						com.instantiations.assist.eclipse.audit.emptyEnhancedForStatement.enabled=true
 						com.instantiations.assist.eclipse.audit.returnInFinally.enabled=true
 						com.instantiations.assist.eclipse.audit.packageNamingConvention.enabled=true
@@ -31,9 +31,9 @@
 						com.instantiations.assist.eclipse.audit.emptyWhileStatement.enabled=true
 						com.instantiations.assist.eclipse.audit.emptyStatement.enabled=true
 						com.instantiations.assist.eclipse.analysis.audit.rule.effectivejava.favorStaticMemberClassesOverNonStatic.enabled=true
-						com.instantiations.assist.eclipse.audit.classNamingConvention.namingConvention=;1;15;t;15;;f;1;f;45
 						com.instantiations.assist.eclipse.audit.emptyIfStatement.enabled=true
 						com.instantiations.assist.eclipse.analysis.audit.rule.effectivejava.avoidSubtypingCloneable.enabled=true
+						com.instantiations.assist.eclipse.audit.classNamingConvention.namingConvention=;1;15;t;15;;f;1;f;45
 						com.instantiations.assist.eclipse.audit.unusedField.enabled=true
 						com.instantiations.assist.eclipse.audit.enumerationConstantNamingConvention.namingConvention=;1;9;t;1;;f;1;f;45
 						com.instantiations.assist.eclipse.audit.equalityTestWithBooleanLiteral.enabled=true
@@ -124,8 +124,8 @@
 						com.instantiations.assist.eclipse.audit.unnecessaryReturn.enabled=true
 						com.instantiations.assist.eclipse.audit.protectedInFinalClass.enabled=true
 						com.instantiations.assist.eclipse.analysis.unnecessaryToString.enabled=true
-						com.instantiations.assist.eclipse.audit.staticFieldNamingConvention.namingConvention=;3;15;t;15;;f;1;f;45
 						com.instantiations.assist.eclipse.audit.emptyTryStatement.enabled=true
+						com.instantiations.assist.eclipse.audit.staticFieldNamingConvention.namingConvention=;3;15;t;15;;f;1;f;45
 						com.instantiations.assist.eclipse.audit.questionableName.enabled=true
 						com.instantiations.assist.eclipse.audit.useCharRatherThanString.enabled=true
 						com.instantiations.assist.eclipse.audit.exceptionUsage.exceptionCreation.enabled=true
