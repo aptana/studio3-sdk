@@ -19,12 +19,14 @@ var Portal = Class.create({
     this.commands = new Commands();
     this.browserInteractions = new Browser();
     this.recentFiles = new RecentFiles();
+    this.configurations = new Configurations();
     
     this.preferences.render();
     this.views.render();
     this.commands.render();
     this.browserInteractions.render();
     this.recentFiles.render();
+    this.configurations.render();
     
     // Add a recent-files observer to the dispatcher. Render the recent files list on a 'recentFiles' event.
     eventsDispatcher.addObserver(Events.RECENT_FILES, function(e) { portal.recentFiles.render(); });
