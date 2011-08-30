@@ -24,6 +24,150 @@
 		<aliases>
 			<alias name="$" type="{$className}"/>
 		</aliases>
+		<!-- Promise Object -->
+		<xsl:variable name="classNamePrefixDeferred" select="concat('deferred', '.')"/>
+		<class type="Promise" superclass="Object">
+			<constructors>
+		      <constructor>
+		        <parameters>
+		        </parameters>
+		        <return-types>
+		          <return-type type="Promise"/>
+		        </return-types>
+		        <description>This object provides a subset of the methods of the Deferred object (then, done, fail, always, pipe. isResolved, and isRejected) to prevent users from changing the state of the Deferred..</description>
+		      </constructor>
+			</constructors>
+			<methods>
+				<xsl:apply-templates select="/api/entries/entry[@type='method' and (@name='deferred.done' or @name='deferred.fail' or @name='deferred.isResolved' or @name='deferred.isRejected' or @name='deferred.promise' or @name='deferred.then' or @name='deferred.always' or @name='deferred.pipe')]" mode="method">
+					<xsl:with-param name="className" select="Deferred"/>
+				</xsl:apply-templates>
+			</methods>
+		</class>
+		<!-- Deferred Object -->
+		<class type="Deferred" superclass="Object">
+			<constructors>
+		      <constructor>
+		        <parameters>
+		          <parameter name="function" type="Function" usage="optional">
+		            <description>An optional function which is called just before the constructor returns and is passed the constructed deferred object as both the this object and as the first argument to the function.</description>
+		          </parameter>
+		        </parameters>
+		        <return-types>
+		          <return-type type="Deferred"/>
+		        </return-types>
+		        <description>A chainable utility object that can register multiple callbacks into callback queues, invoke callback queues, and relay the success or failure state of any synchronous or asynchronous function.</description>
+		      </constructor>
+			</constructors>
+			<methods>
+				<xsl:apply-templates select="/api/entries/entry[@type='method' and starts-with(@name, $classNamePrefixDeferred)]" mode="method">
+					<xsl:with-param name="className" select="Deferred"/>
+				</xsl:apply-templates>
+			</methods>
+		</class>
+		<!-- jqXHR Object -->
+	    <class type="jqXHR" superclass="Promise" visibility="basic">
+	        <description>Object that transfers data between a web client and a remote web server.</description>
+	        <constructors>
+	            <constructor visibility="internal">
+	                <description>Creates a new instance of an XMLHttpRequest object.</description>
+	                <parameters/>
+	                <exceptions/>
+	                <return-types>
+	                    <return-type type="jqXHR"/>
+	                </return-types>
+	            </constructor>
+	        </constructors>
+	        <properties>
+	            <property name="readyState" type="Number" access="read" visibility="basic">
+	                <description>Returns the current state of an object. Valid values are 0=uninitialized, 1=open, 2=sent, 3=receiving, 4=loaded.</description>
+	            </property>
+	            <property name="responseText" type="String" access="read" visibility="basic">
+	                <description>Response formatted as a string.</description>
+	            </property>
+	            <property  name="responseXML" type="Document" access="read" visibility="basic">
+	                <description>Response formatted as an XML document.</description>
+	            </property>
+	            <property name="status" type="Number" access="read" visibility="basic">
+	                <description>Status of the Response. (e.g. 200="OK", 404="Not Found", etc.)</description>
+	            </property>
+	            <property name="statusText" type="String" access="read" visibility="basic">
+	                <description>Response text corresonding to status (e.g. "OK", "Not Found", etc.)</description>
+	            </property>
+	        </properties>
+	        <methods>
+	            <method name="overrideMimeType" visibility="basic">
+	                <description>May be used in the beforeSend() callback function, for example, to modify the response content-type header.</description>
+	                <parameters>
+	                    <parameter name="type" type="String" usage="required">
+	                        <description>String representing the mime type.</description>
+	                    </parameter>
+	                </parameters>
+	                <return-types>
+	                    <return-type type="void"/>
+	                </return-types>
+	                <example/>
+	                <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
+	            </method>
+	            <method name="abort" visibility="basic">
+	                <description>Cancels the current request.</description>
+	                <return-types>
+	                    <return-type type="void"/>
+	                </return-types>
+	                <example/>
+	                <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
+	            </method>
+	            <method name="getAllResponseHeaders" visibility="basic">
+	                <description>Returns all HTTP headers as a single string.</description>
+	                <return-description>Returns all HTTP headers as a single string.</return-description>
+	                <return-types>
+	                    <return-type type="String"/>
+	                </return-types>
+	                <example/>
+	                <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
+	            </method>
+	            
+	            <method name="getResponseHeader" visibility="basic">
+	                <description>Returns the value of the specified HTTP header.</description>
+	                <return-description>Returns the value of the specified HTTP header.</return-description>
+	                <parameters>
+	                    <parameter name="header" type="String" usage="required">
+	                        <description>Name of the HTTP header.</description>
+	                    </parameter>
+	                </parameters>
+	                <return-types>
+	                    <return-type type="String"/>
+	                </return-types>
+	                <example/>
+	                <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
+	            </method>
+	                                    
+	            <method name="setRequestHeader" visibility="basic">
+	                <description>Sets a header and a value for the request.</description>
+	                <parameters>
+	                    <parameter name="header" type="String, Document" usage="required">
+	                        <description>Name of the header.</description>
+	                    </parameter>
+	                    <parameter name="value" type="String, Document" usage="required">
+	                        <description>Value of the header.</description>
+	                    </parameter>
+	                </parameters>
+	                <return-types>
+	                    <return-type type="void"/>
+	                </return-types>
+	                <exceptions>
+	                    <exception type="DOMException">
+	                        <description>Throws an UNKNOWN_ERR error.</description>
+	                    </exception>
+	                </exceptions>
+	                <example/>
+	                <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
+	            </method>
+	            
+	        </methods>
+	        <example/>
+	        <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
+	    </class>
+		<!-- jQuery Object -->
 		<class type="{$className}">
 			<constructors>
 				<xsl:apply-templates select="/api/entries/entry[@type='method' and @name=$className]" mode="constructor"/>
@@ -34,11 +178,24 @@
 				</xsl:apply-templates>
 			</properties>
 			<methods>
+	            <method name="Deferred" visibility="basic">
+			        <parameters>
+			          <parameter name="function" type="Function" usage="optional">
+			            <description>An optional function which is called just before the constructor returns and is passed the constructed deferred object as both the this object and as the first argument to the function.</description>
+			          </parameter>
+			        </parameters>
+			        <return-types>
+			          <return-type type="Deferred"/>
+			        </return-types>
+			        <description>A chainable utility object that can register multiple callbacks into callback queues, invoke callback queues, and relay the success or failure state of any synchronous or asynchronous function.</description>
+	            </method>
+
 				<xsl:apply-templates select="/api/entries/entry[@type='method' and @name!=$className and (not(contains(@name, '.')) or starts-with(@name, $classNamePrefix))]" mode="method">
 					<xsl:with-param name="className" select="$className"/>
 				</xsl:apply-templates>
 			</methods>
 		</class>
+
 	</javascript>
 </xsl:template>
 
