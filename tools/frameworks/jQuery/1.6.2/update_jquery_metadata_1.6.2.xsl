@@ -24,59 +24,35 @@
 		<aliases>
 			<alias name="$" type="{$className}"/>
 		</aliases>
+
+		<!-- Uncomment type-maps once the updated schema is out in the wild
+		<type-maps>
+			<type-map source-type="jQuery" destination-type="Function&lt;jQuery&gt;:jQuery"/>
+		</type-maps>
+		-->
+
 		<!-- Promise Object -->
 		<xsl:variable name="classNamePrefixDeferred" select="concat('deferred', '.')"/>
 		<class type="Promise" superclass="Object">
-			<constructors>
-		      <constructor>
-		        <parameters>
-		        </parameters>
-		        <return-types>
-		          <return-type type="Promise"/>
-		        </return-types>
-		        <description>This object provides a subset of the methods of the Deferred object (then, done, fail, always, pipe. isResolved, and isRejected) to prevent users from changing the state of the Deferred..</description>
-		      </constructor>
-			</constructors>
 			<methods>
 				<xsl:apply-templates select="/api/entries/entry[@type='method' and (@name='deferred.done' or @name='deferred.fail' or @name='deferred.isResolved' or @name='deferred.isRejected' or @name='deferred.promise' or @name='deferred.then' or @name='deferred.always' or @name='deferred.pipe')]" mode="method">
 					<xsl:with-param name="className" select="Deferred"/>
 				</xsl:apply-templates>
 			</methods>
 		</class>
+
 		<!-- Deferred Object -->
 		<class type="Deferred" superclass="Object">
-			<constructors>
-		      <constructor>
-		        <parameters>
-		          <parameter name="function" type="Function" usage="optional">
-		            <description>An optional function which is called just before the constructor returns and is passed the constructed deferred object as both the this object and as the first argument to the function.</description>
-		          </parameter>
-		        </parameters>
-		        <return-types>
-		          <return-type type="Deferred"/>
-		        </return-types>
-		        <description>A chainable utility object that can register multiple callbacks into callback queues, invoke callback queues, and relay the success or failure state of any synchronous or asynchronous function.</description>
-		      </constructor>
-			</constructors>
 			<methods>
 				<xsl:apply-templates select="/api/entries/entry[@type='method' and starts-with(@name, $classNamePrefixDeferred)]" mode="method">
 					<xsl:with-param name="className" select="Deferred"/>
 				</xsl:apply-templates>
 			</methods>
 		</class>
+
 		<!-- jqXHR Object -->
 	    <class type="jqXHR" superclass="Promise" visibility="basic">
 	        <description>Object that transfers data between a web client and a remote web server.</description>
-	        <constructors>
-	            <constructor visibility="internal">
-	                <description>Creates a new instance of an XMLHttpRequest object.</description>
-	                <parameters/>
-	                <exceptions/>
-	                <return-types>
-	                    <return-type type="jqXHR"/>
-	                </return-types>
-	            </constructor>
-	        </constructors>
 	        <properties>
 	            <property name="readyState" type="Number" access="read" visibility="basic">
 	                <description>Returns the current state of an object. Valid values are 0=uninitialized, 1=open, 2=sent, 3=receiving, 4=loaded.</description>
@@ -95,7 +71,7 @@
 	            </property>
 	        </properties>
 	        <methods>
-	            <method name="overrideMimeType" visibility="basic">
+	            <method name="overrideMimeType">
 	                <description>May be used in the beforeSend() callback function, for example, to modify the response content-type header.</description>
 	                <parameters>
 	                    <parameter name="type" type="String" usage="required">
@@ -108,7 +84,7 @@
 	                <example/>
 	                <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
 	            </method>
-	            <method name="abort" visibility="basic">
+	            <method name="abort">
 	                <description>Cancels the current request.</description>
 	                <return-types>
 	                    <return-type type="void"/>
@@ -116,7 +92,7 @@
 	                <example/>
 	                <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
 	            </method>
-	            <method name="getAllResponseHeaders" visibility="basic">
+	            <method name="getAllResponseHeaders">
 	                <description>Returns all HTTP headers as a single string.</description>
 	                <return-description>Returns all HTTP headers as a single string.</return-description>
 	                <return-types>
@@ -125,8 +101,8 @@
 	                <example/>
 	                <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
 	            </method>
-	            
-	            <method name="getResponseHeader" visibility="basic">
+
+	            <method name="getResponseHeader">
 	                <description>Returns the value of the specified HTTP header.</description>
 	                <return-description>Returns the value of the specified HTTP header.</return-description>
 	                <parameters>
@@ -140,8 +116,7 @@
 	                <example/>
 	                <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
 	            </method>
-	                                    
-	            <method name="setRequestHeader" visibility="basic">
+	            <method name="setRequestHeader">
 	                <description>Sets a header and a value for the request.</description>
 	                <parameters>
 	                    <parameter name="header" type="String, Document" usage="required">
@@ -162,11 +137,66 @@
 	                <example/>
 	                <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
 	            </method>
-	            
+	            <method name="statusCode">
+	                <description>Invoke status-code-specific callbacks. If the request is successful, the status code functions take the same parameters as the success callback; if it results in an error, they take the same parameters as the error callback.</description>
+	                <parameters>
+	                    <parameter name="map" type="Object" usage="required">
+	                        <description>A map of numeric HTTP codes and functions to be called when the response has the corresponding code.</description>
+	                    </parameter>
+	                </parameters>
+	                <return-types>
+	                    <return-type type="void"/>
+	                </return-types>
+	                <example/>
+	                <remarks/>
+	            </method>
+	            <method name="success">
+	                <description></description>
+	                <parameters>
+	                	<parameter name="callback" type="Function" usage="required"></parameter>
+	                </parameters>
+	                <return-types>
+	                    <return-type type="jqXHR"/>
+	                </return-types>
+	                <example/>
+	                <remarks/>
+	            </method>
+	            <method name="error">
+	                <description></description>
+	                <parameters>
+	                	<parameter name="callback" type="Function" usage="required"></parameter>
+	                </parameters>
+	                <return-types>
+	                    <return-type type="jqXHR"/>
+	                </return-types>
+	                <example/>
+	                <remarks/>
+	            </method>
+	            <method name="complete">
+	                <description></description>
+	                <parameters>
+	                	<parameter name="callback" type="Function" usage="required"></parameter>
+	                </parameters>
+	                <return-types>
+	                    <return-type type="jqXHR"/>
+	                </return-types>
+	                <example/>
+	                <remarks/>
+	            </method>
+	            <method name="send">
+	                <description></description>
+	                <parameters/>
+	                <return-types>
+	                    <return-type type="void"/>
+	                </return-types>
+	                <example/>
+	                <remarks/>
+	            </method>
 	        </methods>
 	        <example/>
 	        <remarks>Although currently recognized by most browsers, the XMLHttpRequest object will be part of the HTML DOM Level 3 specification.</remarks>
 	    </class>
+
 		<!-- jQuery Object -->
 		<class type="{$className}">
 			<constructors>
