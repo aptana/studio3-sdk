@@ -2,7 +2,7 @@
  * This script manages the portal observer-observable event mechanism.
  */
 // Constants
-var Events = {RECENT_FILES : 'recentFiles'};
+var Events = {RECENT_FILES : 'recentFiles', MOBILE_SDK : 'mobileSDK'};
 // Creates the eventsDispatcher which contains the notify() function.
 // IMPORTANT! The Studio expects the observable to be called 'eventsDispatcher', and 
 // expects the eventsDispatcher function to be called 'notify()'. Do not change these names.
@@ -20,6 +20,7 @@ var Portal = Class.create({
     this.browserInteractions = new Browser();
     this.recentFiles = new RecentFiles();
     this.configurations = new Configurations();
+    this.sdks = new MobileSDK();
     
     this.preferences.render();
     this.views.render();
@@ -27,9 +28,12 @@ var Portal = Class.create({
     this.browserInteractions.render();
     this.recentFiles.render();
     this.configurations.render();
+    this.sdks.render();
     
-    // Add a recent-files observer to the dispatcher. Render the recent files list on a 'recentFiles' event.
+    // Add a recent-files observer to the dispatcher. Render the recent files list on a 'recentFiles' events.
     eventsDispatcher.addObserver(Events.RECENT_FILES, function(e) { portal.recentFiles.render(); });
+    // Add a Mobile SDKs observer to the dispatcher. Render the Mobile SDK table on a 'mobileSDK' events.
+    eventsDispatcher.addObserver(Events.MOBILE_SDK, function(e) { portal.sdks.render(); });
   }
 });
 
