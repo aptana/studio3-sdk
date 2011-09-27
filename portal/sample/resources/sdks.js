@@ -65,6 +65,18 @@ MobileSDK = Class.create({
 							td(androidVersionInfo["shouldUpdateSDKTools"])
 						),
 						tr(
+							td("Installed Add-Ons: "), 
+							td(androidVersionInfo["installedAddOns"])
+						),
+						tr(
+							td("Required Add-Ons: "),
+							td(androidVersionInfo["requiredAddOns"])
+						), 
+						tr(
+							td("Needs Add-Ons Update: "), 
+							td(androidVersionInfo["shouldUpdateAddOns"])
+						),
+						tr(
 							td("SDK-Tools URL: "), 
 							td(androidVersionInfo["sdkURL"])
 						),
@@ -123,6 +135,9 @@ MobileSDK = Class.create({
 	 *     installedSDKTools : <latest installed SDK tools revision>, 
 	 *     requiredSDKTools : <the required SDK tools revision>,
 	 *     shouldUpdateSDKTools : <boolean value indicating that the SDK tools should be updated>, 
+	 *     installedAddOns : &lt;latest installed add-ons&gt;, 
+	 *     requiredAddOns : &lt;the required add-ons&gt;,
+	 *     shouldUpdateAddOns : &lt;boolean value indicating that the add-ons should be updated&gt;, 
 	 *     sdkToolsURL : <SDK Tools URL for an installation/update>
 	 *     hasJavaHome : <boolean value indicating that the JAVA_HOME was set>
 	 *   }
