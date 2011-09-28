@@ -155,7 +155,7 @@ MobileSDK = Class.create({
 				controller : 'portal.mobileSDK',
 				action : "getSDKInfo",
 				args : [sdk].toJSON()
-			}).toJSON());
+			}).toJSON()).evalJSON();
 		}
 		return null;
 	}
