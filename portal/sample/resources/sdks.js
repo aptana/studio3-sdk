@@ -83,6 +83,14 @@ MobileSDK = Class.create({
 						tr(
 							td("Has JAVA_HOME Setting: "), 
 							td(androidVersionInfo["hasJavaHome"])
+						),
+						tr(
+							td("Has JDK: "), 
+							td(androidVersionInfo["hasJDK"])
+						),
+						tr(
+							td("JDK URL: "), 
+							td(androidVersionInfo["jdkURL"])
 						)
 					)
 				);
@@ -140,6 +148,8 @@ MobileSDK = Class.create({
 	 *     shouldUpdateAddOns : &lt;boolean value indicating that the add-ons should be updated&gt;, 
 	 *     sdkToolsURL : <SDK Tools URL for an installation/update>
 	 *     hasJavaHome : <boolean value indicating that the JAVA_HOME was set>
+	 *     hasJDK : <boolean value indicating that a JDK was detected>
+	 *     jdkURL : <JDK installer URL>
 	 *   }
 	 * </pre>
 	 * 
