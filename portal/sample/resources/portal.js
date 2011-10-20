@@ -19,6 +19,7 @@ var Portal = Class.create({
     this.commands = new Commands();
     this.browserInteractions = new Browser();
     this.recentFiles = new RecentFiles();
+    this.samples = new Samples();
     this.configurations = new Configurations();
     this.sdks = new MobileSDK();
     
@@ -27,6 +28,7 @@ var Portal = Class.create({
     this.commands.render();
     this.browserInteractions.render();
     this.recentFiles.render();
+    this.samples.render();
     this.configurations.render();
     this.sdks.render();
     
