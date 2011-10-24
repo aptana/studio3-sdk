@@ -1,0 +1,35 @@
+User = Class.create({
+	/**
+	 * Render the items that will import a sample project.
+	 */
+	render : function() {
+		// Get the div for the Open-View example
+		userDiv = $('user');
+		with(Elements.Builder) {
+			if( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
+				console.log("Dispatching the 'getUser' action on the 'portal.user' controller...");
+				userInfo = dispatch($H({
+					controller : 'portal.user',
+					action : "getUser"
+				}).toJSON()).evalJSON();
+				userTable = table({
+					"border" : "1",
+					"style" : "border-collapse:collapse"
+				}, tbody(
+					tr(
+						th("ID"), 
+						th("Name"), 
+						th("Email"), 
+						th("Image")), 
+					tr(
+						td(userInfo["id"]), 
+						td(userInfo["name"]), 
+						td(userInfo["email"]), 
+						td(img({"src" : "http://www.gravatar.com/avatar/" + userInfo["hash"]}))
+					)
+				));
+				userDiv.appendChild(userTable);
+			}
+		}
+	}
+});
