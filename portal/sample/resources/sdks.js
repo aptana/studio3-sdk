@@ -3,10 +3,11 @@ MobileSDK = Class.create({
 	 * Render the items that will trigger a studio's command.
 	 */
 	render : function() {
-		// Get the div for the command-example.
-		mobileSDKDiv = $('mobileSDKs');
-		iOSVersionInfo = this.getVersionInfo("iOS");
-		androidVersionInfo = this.getVersionInfo("Android");
+		// These calls will trigger an asynchronous operation on the Studio side. 
+		// Once the studio is done, the 'update' function will be called from the Portal's
+		// event handling code, and the SDK table will be rendered / re-rendered.
+		this.getVersionInfo("iOS");
+		this.getVersionInfo("Android");
 	},
 	
 	update : function(sdkEvent) {
