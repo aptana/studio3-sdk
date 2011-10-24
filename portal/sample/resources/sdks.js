@@ -5,131 +5,168 @@ MobileSDK = Class.create({
 	render : function() {
 		// Get the div for the command-example.
 		mobileSDKDiv = $('mobileSDKs');
-		with(Elements.Builder) {
-			iOSVersionInfo = this.getVersionInfo("iOS");
-			androidVersionInfo = this.getVersionInfo("Android");
-			//alert($H(androidVersionInfo).inspect());
-			if( typeof (iOSVersionInfo) !== 'undefined' && typeof (androidVersionInfo) !== 'undefined') {
-				iosTable = table({"border":"1", "style" : "border-collapse:collapse"},
-					tbody(
-						tr(
-							td("Installed iOS Version: "), 
-							td(iOSVersionInfo["installedPlatform"])
-						),
-						tr(
-							td("Minimum Required Version: "),
-							td(iOSVersionInfo["requiredPlatform"])
-						), 
-						tr(
-							td("Needs Update: "), 
-							td(iOSVersionInfo["shouldUpdatePlatform"])
-						)
-					)
-				);
-				androidTable = table({"border":"1", "style" : "border-collapse:collapse"},
-				  tbody(
-						tr(
-							td("Installed Platforms: "), 
-							td(androidVersionInfo["installedPlatforms"])
-						),
-						tr(
-							td("Required Platforms: "),
-							td(androidVersionInfo["requiredPlatforms"])
-						), 
-						tr(
-							td("Needs Platforms Update: "), 
-							td(androidVersionInfo["shouldUpdatePlatforms"])
-						),
-						tr(
-							td("Installed Platform-Tools: "), 
-							td(androidVersionInfo["installedPlatformTools"])
-						),
-						tr(
-							td("Required Platform-Tools: "),
-							td(androidVersionInfo["requiredPlatformTools"])
-						), 
-						tr(
-							td("Needs Platform-Tools Update: "), 
-							td(androidVersionInfo["shouldUpdatePlatformTools"])
-						), 
-						tr(
-							td("Installed SDK-Tools: "), 
-							td(androidVersionInfo["installedSDKTools"])
-						),
-						tr(
-							td("Required SDK-Tools: "),
-							td(androidVersionInfo["requiredSDKTools"])
-						), 
-						tr(
-							td("Needs SDK-Tools Update: "), 
-							td(androidVersionInfo["shouldUpdateSDKTools"])
-						),
-						tr(
-							td("Installed Add-Ons: "), 
-							td(androidVersionInfo["installedAddOns"])
-						),
-						tr(
-							td("Required Add-Ons: "),
-							td(androidVersionInfo["requiredAddOns"])
-						), 
-						tr(
-							td("Needs Add-Ons Update: "), 
-							td(androidVersionInfo["shouldUpdateAddOns"])
-						),
-						tr(
-							td("SDK-Tools URL: "), 
-							td(androidVersionInfo["sdkURL"])
-						),
-						tr(
-							td("Has JAVA_HOME Setting: "), 
-							td(androidVersionInfo["hasJavaHome"])
-						),
-						tr(
-							td("Has JDK: "), 
-							td(androidVersionInfo["hasJDK"])
-						),
-						tr(
-							td("JDK URL: "), 
-							td(androidVersionInfo["jdkURL"])
-						)
-					)
-				);
-				
-				// Create a div that wraps all of it, so we can easily replace the children on 
-				// render calls that were made as a result of an event handling.
-				wrapperDiv = div({'id' : 'mobileSDKsContent'});
-				wrapperDiv.appendChild(div({"style" : "color:red"}, "=== iOS ==="));
-				wrapperDiv.appendChild(iosTable);
-				wrapperDiv.appendChild(div({"style" : "color:red"}, "=== Android ==="));
-				wrapperDiv.appendChild(androidTable);
-				
-				// An install/update Android link.
-				// Note that for iOS we should just show install instructions.
-				wrapperDiv.appendChild(div({"style" : "color:red"}, "=== Android Install/Update ==="));
-				installOrUpdate = table(tbody(tr(td(a({'href' : '#'}, "Install/Update Android")))));
-				wrapperDiv.appendChild(installOrUpdate);
-				
-				var prevContent = $('mobileSDKsContent');
-        if (prevContent) {
-            mobileSDKDiv.replaceChild(wrapperDiv, prevContent);
-        } else {
-            mobileSDKDiv.appendChild(wrapperDiv);
-        }
-        
-				installOrUpdate.observe('click', function(e) {
-					if( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
-						console.log("Dispatching the 'execute' action on the 'portal.mobileSDK' controller...");
-						dispatch($H({
-							controller : 'portal.mobileSDK',
-							action : "installOrUpdateSDK",
-							args : ["Android"].toJSON()
-						}).toJSON());
-					}
-					return false;
-				});
+		iOSVersionInfo = this.getVersionInfo("iOS");
+		androidVersionInfo = this.getVersionInfo("Android");
+	},
+	
+	update : function(sdkEvent) {
+		if (sdkEvent["eventType"] == "response") {
+			eventData = sdkEvent["data"];
+			sdkName = eventData["sdkName"];
+			sdkInfo = eventData["sdkInfo"];
+			if(typeof (console) !== 'undefined') {
+			  console.log("Got an update for the " + sdkName + " SDK info.");
+		  }
+			if (sdkName == "ios") {
+				this.renderIOS(sdkInfo);
+			} else if (sdkName == "android") {
+				this.renderAndroid(sdkInfo);
 			}
 		}
 	},
+	
+	/**
+	 * Render the iOS SDK table, potentially replacing the previous content with an updated one. 
+	 */
+	renderIOS : function(androidVersionInfo) {
+		mobileSDKDiv = $('mobileSDKs');
+		with(Elements.Builder) {
+			iosTable = table({"border":"1", "style" : "border-collapse:collapse"},
+				tbody(
+					tr(
+						td("Installed iOS Version: "), 
+						td(iOSVersionInfo["installedPlatform"])
+					),
+					tr(
+						td("Minimum Required Version: "),
+						td(iOSVersionInfo["requiredPlatform"])
+					), 
+					tr(
+						td("Needs Update: "), 
+						td(iOSVersionInfo["shouldUpdatePlatform"])
+					)
+				)
+			);
+			// Create a div that wraps all of it, so we can easily replace the children on 
+			// render calls that were made as a result of an event handling.
+			wrapperDiv = div({'id' : 'iosSDKDiv'});
+			wrapperDiv.appendChild(div({"style" : "color:red"}, "=== iOS ==="));
+			wrapperDiv.appendChild(iosTable);
+			var prevContent = $('iosSDKDiv');
+      if (prevContent) {
+          mobileSDKDiv.replaceChild(wrapperDiv, prevContent);
+      } else {
+          mobileSDKDiv.appendChild(wrapperDiv);
+      }
+		}
+	},
+	
+	/**
+	 * Render the Android SDK table, potentially replacing the previous content with an updated one. 
+	 */
+	renderAndroid : function(androidVersionInfo) {
+		mobileSDKDiv = $('mobileSDKs');
+		with(Elements.Builder) {
+			androidTable = table({"border":"1", "style" : "border-collapse:collapse"},
+			  tbody(
+					tr(
+						td("Installed Platforms: "), 
+						td(androidVersionInfo["installedPlatforms"])
+					),
+					tr(
+						td("Required Platforms: "),
+						td(androidVersionInfo["requiredPlatforms"])
+					), 
+					tr(
+						td("Needs Platforms Update: "), 
+						td(androidVersionInfo["shouldUpdatePlatforms"])
+					),
+					tr(
+						td("Installed Platform-Tools: "), 
+						td(androidVersionInfo["installedPlatformTools"])
+					),
+					tr(
+						td("Required Platform-Tools: "),
+						td(androidVersionInfo["requiredPlatformTools"])
+					), 
+					tr(
+						td("Needs Platform-Tools Update: "), 
+						td(androidVersionInfo["shouldUpdatePlatformTools"])
+					), 
+					tr(
+						td("Installed SDK-Tools: "), 
+						td(androidVersionInfo["installedSDKTools"])
+					),
+					tr(
+						td("Required SDK-Tools: "),
+						td(androidVersionInfo["requiredSDKTools"])
+					), 
+					tr(
+						td("Needs SDK-Tools Update: "), 
+						td(androidVersionInfo["shouldUpdateSDKTools"])
+					),
+					tr(
+						td("Installed Add-Ons: "), 
+						td(androidVersionInfo["installedAddOns"])
+					),
+					tr(
+						td("Required Add-Ons: "),
+						td(androidVersionInfo["requiredAddOns"])
+					), 
+					tr(
+						td("Needs Add-Ons Update: "), 
+						td(androidVersionInfo["shouldUpdateAddOns"])
+					),
+					tr(
+						td("SDK-Tools URL: "), 
+						td(androidVersionInfo["sdkURL"])
+					),
+					tr(
+						td("Has JAVA_HOME Setting: "), 
+						td(androidVersionInfo["hasJavaHome"])
+					),
+					tr(
+						td("Has JDK: "), 
+						td(androidVersionInfo["hasJDK"])
+					),
+					tr(
+						td("JDK URL: "), 
+						td(androidVersionInfo["jdkURL"])
+					)
+				)
+			);
+			// Create a div that wraps all of it, so we can easily replace the children on 
+			// render calls that were made as a result of an event handling.
+			wrapperDiv = div({'id' : 'androidSDKDiv'});
+			wrapperDiv.appendChild(div({"style" : "color:red"}, "=== Android ==="));
+			wrapperDiv.appendChild(androidTable);
+			
+			// An install/update Android link.
+			// Note that for iOS we should just show install instructions.
+			wrapperDiv.appendChild(div({"style" : "color:red"}, "=== Android Install/Update ==="));
+			installOrUpdate = table(tbody(tr(td(a({'href' : '#'}, "Install/Update Android")))));
+			wrapperDiv.appendChild(installOrUpdate);
+				
+			var prevContent = $('androidSDKDiv');
+      if (prevContent) {
+          mobileSDKDiv.replaceChild(wrapperDiv, prevContent);
+      } else {
+          mobileSDKDiv.appendChild(wrapperDiv);
+      }
+      installOrUpdate.observe('click', function(e) {
+				if( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
+					console.log("Dispatching the 'execute' action on the 'portal.mobileSDK' controller...");
+					dispatch($H({
+						controller : 'portal.mobileSDK',
+						action : "installOrUpdateSDK",
+						args : ["Android"].toJSON()
+					}).toJSON());
+				}
+				return false;
+			});
+		}
+	},
+	
 	/**
 	 * Returns the version information for a requested SDK type (e.g. 'Android', 'iOS' and 'BlackBerry').
 	 * The version info we get back is a hash that holds the following fields:
@@ -160,12 +197,12 @@ MobileSDK = Class.create({
 	getVersionInfo : function(sdk) {
 
 		if( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
-			console.log("Dispatching the 'getSDKInfo' action on the 'portal.mobileSDK' controller...");
+			console.log("Dispatching an async call to 'getSDKInfo' action on the 'portal.mobileSDK' controller...");
 			return dispatch($H({
 				controller : 'portal.mobileSDK',
 				action : "getSDKInfo",
 				args : [sdk].toJSON()
-			}).toJSON()).evalJSON();
+			}).toJSON());
 		}
 		return null;
 	}

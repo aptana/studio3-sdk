@@ -37,7 +37,7 @@ var Portal = Class.create({
     // Add a recent-files observer to the dispatcher. Render the recent files list on a 'recentFiles' events.
     eventsDispatcher.addObserver(Events.RECENT_FILES, function(e) { portal.recentFiles.render(); });
     // Add a Mobile SDKs observer to the dispatcher. Render the Mobile SDK table on a 'mobileSDK' events.
-    eventsDispatcher.addObserver(Events.MOBILE_SDK, function(e) { portal.sdks.render(); });
+    eventsDispatcher.addObserver(Events.MOBILE_SDK, function(e) { portal.sdks.update(e); });
   }
 });
 
