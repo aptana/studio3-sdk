@@ -29,7 +29,7 @@ MobileSDK = Class.create({
 	/**
 	 * Render the iOS SDK table, potentially replacing the previous content with an updated one. 
 	 */
-	renderIOS : function(androidVersionInfo) {
+	renderIOS : function(iOSVersionInfo) {
 		mobileSDKDiv = $('mobileSDKs');
 		with(Elements.Builder) {
 			iosTable = table({"border":"1", "style" : "border-collapse:collapse"},
