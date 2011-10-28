@@ -1,9 +1,8 @@
 User = Class.create({
 	/**
-	 * Render the items that will import a sample project.
+	 * Render the items that will display the Titanium-User information
 	 */
 	render : function() {
-		// Get the div for the Open-View example
 		userDiv = $('user');
 		with(Elements.Builder) {
 			if( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {

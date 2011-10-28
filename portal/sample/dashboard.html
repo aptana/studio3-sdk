@@ -28,43 +28,52 @@
 		<script src="resources/configurations.js" type="text/javascript"></script>
 		<script src="resources/sdks.js" type="text/javascript"></script>
 		<script src="resources/user.js" type="text/javascript"></script>
+		<script src="resources/updates.js" type="text/javascript"></script>
 		<!-- Main Portal -->
 		<script src="resources/portal.js" type="text/javascript"></script>
+		<style type="text/css">
+  		div.sample { color: #6600FF; font-weight: bold; border-bottom:1px; border-bottom-style: dotted}
+		</style>
 	</head>
 	<body onload="loadPortal(false)">
 		<!-- Open a view -->
-		<div>Open Views</div>
+		<div class="sample">Open Views</div>
 		<div id="openViewId"></div>
 		<br>
 		<!-- Execute Studio commands that were contributed through 'org.eclipse.ui.commands' -->
-		<div>Execute Studio Commands ('org.eclipse.ui.commands' contributions)</div>
+		<div class="sample">Execute Studio Commands ('org.eclipse.ui.commands' contributions)</div>
 		<div id="executeCommandId"></div>
 		<br>
 		<!-- Browser -->
-		<div>Browser</div>
+		<div class="sample">Browser</div>
 		<div id="browserInteractions"></div>
 		<br>
 		<!-- Recently Opened Files -->
-		<div>Recently Opened Files</div>
+		<div class="sample">Recently Opened Files</div>
 		<div id="recentFiles"></div>
 		<br>
 		<!-- Configurations -->
-		<div>Configurations</div>
+		<div class="sample">Configurations</div>
 		<div id="configurations"></div>
 		<br>
 		<!-- Project Samples -->
-		<div>Project Samples</div>
+		<div class="sample">Project Samples</div>
 		<div id="projectSamples"></div>
 		<br>
 		<!-- Titanium User -->
-		<div>Titanium User</div>
+		<div class="sample">Titanium User</div>
 		<div id="user"></div>
 		<br>
+		<!-- Titanium Updates -->
+		<div class="sample">Titanium Updates</div>
+		<div id="updates"></div>
+		<br>
 		<!-- Mobile SDKs (Titanium Studio Only) -->
-		<div>Mobile SDKs</div>
+		<div class="sample">Mobile SDKs</div>
 		<div id="mobileSDKs"></div>
 		<br>
 		<!-- Studio preferences interaction -->
+		<div class="sample">Preferences Integration</div>
 		<div id="toolboxPref" class='preference checkbox' text='Load the Dashboard on startup' key='open_dashboard'></div>
 	</body>
 </html>
