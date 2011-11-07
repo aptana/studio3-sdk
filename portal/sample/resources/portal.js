@@ -17,6 +17,7 @@ var Portal = Class.create({
     this.preferences  = new Preferences();
     this.views = new Views();
     this.commands = new Commands();
+    this.templates = new Templates();
     this.browserInteractions = new Browser();
     this.recentFiles = new RecentFiles();
     this.samples = new Samples();
@@ -28,6 +29,7 @@ var Portal = Class.create({
     this.preferences.render();
     this.views.render();
     this.commands.render();
+    this.templates.render();
     this.browserInteractions.render();
     this.recentFiles.render();
     this.samples.render();

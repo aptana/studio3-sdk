@@ -13,7 +13,9 @@ Commands = Class.create({
         	  		tr(td(elm3 = a({'href' : '#'}, "Command #3 - Command With Parameters - Open the BreakPoints View"))),
         	  		tr(td(elm4 = a({'href' : '#'}, "Command #4 - Open a 'New Web Project' wizard"))),
 					tr(td(elm5 = a({'href' : '#'}, "Command #5 - Open a 'New Titanium Desktop Project' wizard"))),
-					tr(td(elm6 = a({'href' : '#'}, "Command #6 - Open a 'New Titanium Mobile Project' wizard")))
+					tr(td(elm6 = a({'href' : '#'}, "Command #6 - Open a 'New Titanium Mobile Project' wizard"))),
+					tr(td(elm7 = a({'href' : '#'}, "Command #7 - Open a 'New Titanium Mobile Project from 'Geolocation mobile client' template' wizard"))),
+					tr(td(elm8 = a({'href' : '#'}, "Command #8 - Open a 'New Web Project from 'Basic Web Template' template' wizard")))
         	  ));
             viewExampleDiv.appendChild(commands);
             // Observe and report selection changes for this item
@@ -103,6 +105,42 @@ Commands = Class.create({
                         controller : 'portal.commands',
                         action : "execute",
                         args : ["org.eclipse.ui.newWizard", {"newWizardId" : "com.appcelerator.titanium.mobile.project_wizard"}].toJSON()
+                    }).toJSON());
+                }
+                return false;
+            });
+        
+            // Observe and report selection changes for this item
+            // NOTES: 
+            // -- This one is a command with parameters
+            // -- "com.appcelerator.titanium.mobile.project_wizard" - Titanium Studio Mobile project wizard ID
+            // -- "com.aptana.project.templates.mobile.geos" - Built in template for mobile projects
+            elm7.observe('click', function(e) {
+                inputElement = e.element();
+                if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
+                    console.log("Dispatching the 'execute' action (with parameters) on the 'portal.commands' controller...");
+                    dispatch($H({
+                        controller : 'portal.commands',
+                        action : "execute",
+                        args : ["com.aptana.portal.ui.command.newProjectFromTemplate", {"newWizardId" : "com.appcelerator.titanium.mobile.project_wizard", "projectTemplateId" : "com.appcelerator.titanium.project.template.mobile.geo"}].toJSON()
+                    }).toJSON());
+                }
+                return false;
+            });
+            
+                        // Observe and report selection changes for this item
+            // NOTES: 
+            // -- This one is a command with parameters
+            // -- "com.appcelerator.titanium.mobile.project_wizard" - Titanium Studio Mobile project wizard ID
+            // -- "com.aptana.project.templates.html.basic" - Built in template for mobile projects
+            elm8.observe('click', function(e) {
+                inputElement = e.element();
+                if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
+                    console.log("Dispatching the 'execute' action (with parameters) on the 'portal.commands' controller...");
+                    dispatch($H({
+                        controller : 'portal.commands',
+                        action : "execute",
+                        args : ["com.aptana.portal.ui.command.newProjectFromTemplate", {"newWizardId" : "com.aptana.ui.wizards.NewWebProject", "projectTemplateId" : "com.aptana.project.template.web.basic"}].toJSON()
                     }).toJSON());
                 }
                 return false;
