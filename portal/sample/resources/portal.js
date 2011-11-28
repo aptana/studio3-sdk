@@ -2,7 +2,8 @@
  * This script manages the portal observer-observable event mechanism.
  */
 // Constants
-var Events = {RECENT_FILES : 'recentFiles', MOBILE_SDK : 'mobileSDK', TITANIUM_SDK : 'titaniumSDK'};
+var Events = {RECENT_FILES : 'recentFiles', MOBILE_SDK : 'mobileSDK', TITANIUM_SDK : 'titaniumSDK', 
+              SAMPLES : 'samples'};
 // Creates the eventsDispatcher which contains the notify() function.
 // IMPORTANT! The Studio expects the observable to be called 'eventsDispatcher', and 
 // expects the eventsDispatcher function to be called 'notify()'. Do not change these names.
@@ -44,6 +45,8 @@ var Portal = Class.create({
     eventsDispatcher.addObserver(Events.MOBILE_SDK, function(e) { portal.sdks.update(e); });
     // Add a Titanium SDKs observer to the dispatcher. Render the Titanium SDK update status on a 'mobileSDK' events.
     eventsDispatcher.addObserver(Events.TITANIUM_SDK, function(e) { portal.updates.update(e); });
+    // Add a Samples observer to the dispatcher. Can be used to render the Samples as they are added/removed.
+    eventsDispatcher.addObserver(Events.SAMPLES, function(e) { portal.samples.update(e); });
   }
 });
 

@@ -46,5 +46,21 @@ Samples = Class.create({
 			}).toJSON());
 		}
     return false;
+  },
+  
+  // Accepts an update that was triggered by a browser-notification when a sample
+  // was loaded (added) or unloaded (deleted).
+  // The event holds the given information for the nature of the notification (added/deleted), 
+  // and hold the Sample-Info in its 'data' mapping.
+  // The Sample in the 'data' will hold these attributes:
+	// 1. category
+	// 2. name
+	// 3. id
+	// 4. description
+	// 5. image (currently, empty)
+  update : function(e) {
+  	if( typeof (console) !== 'undefined') {
+  		console.log("A Sample was " + e.eventType);
+  	}
   }
 });
