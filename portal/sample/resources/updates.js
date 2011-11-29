@@ -24,6 +24,23 @@ Updates = Class.create({
 				"id" : "install",
 				"style" : "padding-left:15px; color:red"
 			}));
+			updatesDiv.appendChild(br());
+			updatesDiv.appendChild(div(b("Install SDK from url: "), urlInput = input({'type' : 'text', 'name' : 'sdkUrl', 'value' : '', 'size' : '50'}), launchButton = button({'type' : 'button'}, "Install!")));
+			
+			launchButton.observe('click', function(e) {
+                inputElement = e.element();
+                if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
+					console.log("Dispatching the 'installSDK' action on the 'portal.titanium.update' controller with arg " + urlInput.value + "...");
+					var response = dispatch($H({
+						controller : 'portal.titanium.update',
+						action : "installSDK",
+						args : '["' + urlInput.value + '"]'
+					}).toJSON());
+					
+					console.log("Response from the 'installSDK' action: " + response);
+                }
+                return false;
+            });
 		}
 		// Listen to the 'Check for updates' and trigger the controller-action that does that.
 		checkLink.observe('click', this.checkForUpdates);
