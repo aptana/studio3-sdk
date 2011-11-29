@@ -3,7 +3,7 @@
  */
 // Constants
 var Events = {RECENT_FILES : 'recentFiles', MOBILE_SDK : 'mobileSDK', TITANIUM_SDK : 'titaniumSDK', 
-              SAMPLES : 'samples'};
+              SAMPLES : 'samples', TEMPLATES : 'templates'};
 // Creates the eventsDispatcher which contains the notify() function.
 // IMPORTANT! The Studio expects the observable to be called 'eventsDispatcher', and 
 // expects the eventsDispatcher function to be called 'notify()'. Do not change these names.
@@ -47,6 +47,8 @@ var Portal = Class.create({
     eventsDispatcher.addObserver(Events.TITANIUM_SDK, function(e) { portal.updates.update(e); });
     // Add a Samples observer to the dispatcher. Can be used to render the Samples as they are added/removed.
     eventsDispatcher.addObserver(Events.SAMPLES, function(e) { portal.samples.update(e); });
+    // Add a Templates observer to the dispatcher. Can be used to render the Templates as they are added/removed.
+    eventsDispatcher.addObserver(Events.TEMPLATES, function(e) { portal.templates.update(e); });
   }
 });
 
