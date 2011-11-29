@@ -69,5 +69,20 @@ Templates = Class.create({
                 return false;
             });
 		}
-	}
+	},
+  
+  // Accepts an update that was triggered by a browser-notification when a project-template
+  // was loaded (added) or unloaded (deleted).
+  // The event holds the given information for the nature of the notification (added/deleted), 
+  // and hold the Template-Info in its 'data' mapping.
+  // The Template in the 'data' will hold these attributes:
+	// 1. name
+	// 2. id
+	// 3. description
+	// 4. type
+  update : function(e) {
+  	if( typeof (console) !== 'undefined') {
+  		console.log("A Template was " + e.eventType);
+  	}
+  }
 });

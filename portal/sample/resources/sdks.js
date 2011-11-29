@@ -161,6 +161,7 @@ MobileSDK = Class.create({
 						controller : 'portal.mobileSDK',
 						action : "installOrUpdateSDK",
 						args : ["Android"].toJSON()
+						// args : ["Android", true].toJSON() --> To force the Android installer UI
 					}).toJSON());
 				}
 				return false;
