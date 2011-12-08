@@ -26,6 +26,7 @@ var Portal = Class.create({
     this.updates = new Updates();
     this.configurations = new Configurations();
     this.sdks = new MobileSDK();
+    this.modules = new Modules();
     
     this.preferences.render();
     this.views.render();
@@ -38,6 +39,7 @@ var Portal = Class.create({
     this.updates.render();
     this.configurations.render();
     this.sdks.render();
+    this.modules.render();
     
     // Add a recent-files observer to the dispatcher. Render the recent files list on a 'recentFiles' events.
     eventsDispatcher.addObserver(Events.RECENT_FILES, function(e) { portal.recentFiles.render(); });
