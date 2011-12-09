@@ -1,4 +1,4 @@
-Updates = Class.create({
+SDKUpdates = Class.create({
 	/**
 	 * Render the items that will display the Titanium SDK status.
 	 * In case an update is needed, a link will appear to allow installing the SDK.

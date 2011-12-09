@@ -23,7 +23,7 @@ var Portal = Class.create({
     this.recentFiles = new RecentFiles();
     this.samples = new Samples();
     this.user = new User();
-    this.updates = new Updates();
+    this.sdkUpdates = new SDKUpdates();
     this.configurations = new Configurations();
     this.sdks = new MobileSDK();
     this.modules = new Modules();
@@ -36,7 +36,7 @@ var Portal = Class.create({
     this.recentFiles.render();
     this.samples.render();
     this.user.render();
-    this.updates.render();
+    this.sdkUpdates.render();
     this.configurations.render();
     this.sdks.render();
     this.modules.render();
@@ -46,7 +46,7 @@ var Portal = Class.create({
     // Add a Mobile SDKs observer to the dispatcher. Render the Mobile SDK table on a 'mobileSDK' events.
     eventsDispatcher.addObserver(Events.MOBILE_SDK, function(e) { portal.sdks.update(e); });
     // Add a Titanium SDKs observer to the dispatcher. Render the Titanium SDK update status on a 'mobileSDK' events.
-    eventsDispatcher.addObserver(Events.TITANIUM_SDK, function(e) { portal.updates.update(e); });
+    eventsDispatcher.addObserver(Events.TITANIUM_SDK, function(e) { portal.sdkUpdates.update(e); });
     // Add a Samples observer to the dispatcher. Can be used to render the Samples as they are added/removed.
     eventsDispatcher.addObserver(Events.SAMPLES, function(e) { portal.samples.update(e); });
     // Add a Templates observer to the dispatcher. Can be used to render the Templates as they are added/removed.
