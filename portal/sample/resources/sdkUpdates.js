@@ -7,7 +7,7 @@ SDKUpdates = Class.create({
 	render : function() {
 		// Prepare the link that will trigger an asynchronous check for the update.
 		// The 'update' method will be the one to render the results as they arrive from the Studio side.
-		var updatesDiv = $('updates');
+		var updatesDiv = $('sdkUpdates');
 		var checkLink;
 		with(Elements.Builder) {
 			// Create three spans under the 'updates div'.
@@ -17,11 +17,11 @@ SDKUpdates = Class.create({
 				"href" : "#"
 			}, "Check for updates")));
 			updatesDiv.appendChild(span({
-				"id" : "update-status",
+				"id" : "sdk-update-status",
 				"style" : "padding-left:15px; color:green"
 			}));
 			updatesDiv.appendChild(span({
-				"id" : "install",
+				"id" : "install-sdk",
 				"style" : "padding-left:15px; color:red"
 			}));
 			updatesDiv.appendChild(br());
@@ -30,9 +30,9 @@ SDKUpdates = Class.create({
 			launchButton.observe('click', function(e) {
                 inputElement = e.element();
                 if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
-					console.log("Dispatching the 'installSDK' action on the 'portal.titanium.update' controller with arg " + urlInput.value + "...");
+					console.log("Dispatching the 'installSDK' action on the 'portal.titanium.sdk.update' controller with arg " + urlInput.value + "...");
 					var response = dispatch($H({
-						controller : 'portal.titanium.update',
+						controller : 'portal.titanium.sdk.update',
 						action : "installSDK",
 						args : '["' + urlInput.value + '"]'
 					}).toJSON());
@@ -71,36 +71,36 @@ SDKUpdates = Class.create({
 				// Render the results.
 				installedMobile = status.data.installedMobileSDK;
 				installedDesktop = status.data.installedDesktopSDK;
-				statusSpan = $('update-status');
+				statusSpan = $('sdk-update-status');
 				statusSpan.innerHTML = "Mobile: [" + installedMobile + "], Desktop: [" + installedDesktop + "]";
 
 				// if an update is needed, inject a link and listen to 'update' click.
-				var installSpan = $('install');
+				var installSpan = $('install-sdk');
 				installSpan.innerHTML = "Upadate Available: " + status.data.updateAvailable;
 				if(status.data.updateAvailable) {
 					// Render a link inside the span
 					with(Elements.Builder) {
-						updateLink = $('update-link');
+						updateLink = $('update-sdk-link');
 						if(updateLink) {
 							installSpan.replaceChild( newLink = a({
 								"href" : "#",
-								"id" : "update-link",
+								"id" : "update-sdk-link",
 								"style" : "padding-left:15px;"
 							}, "Update!"), updateLink);
 							updateLink = newLink;
 						} else {
 							installSpan.appendChild( updateLink = a({
 								"href" : "#",
-								"id" : "update-link",
+								"id" : "update-sdk-link",
 								"style" : "padding-left:15px;"
 							}, "Update!"));
 						}
 						// Listen to update clicks
 						updateLink.observe('click', function(e) {
 							if( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
-								console.log("Dispatching the 'installUpdate' action on the 'portal.titanium.update' controller...");
+								console.log("Dispatching the 'installUpdate' action on the 'portal.titanium.sdk.update' controller...");
 								dispatch($H({
-									controller : 'portal.titanium.update',
+									controller : 'portal.titanium.sdk.update',
 									action : "installUpdate"
 								}).toJSON());
 							}
@@ -121,8 +121,8 @@ SDKUpdates = Class.create({
 	 *  - unknown
 	 */
 	updateInstallProgress : function(status) {
-		var installSpan = $('install');
-		var updateLink = $('update-link');
+		var installSpan = $('install-sdk');
+		var updateLink = $('update-sdk-link');
 		switch(status) {
 			case 'ok':
 				// remove the update link and call for another check
@@ -132,7 +132,7 @@ SDKUpdates = Class.create({
 			case 'processing':
 				with(Elements.Builder) {
 					installSpan.replaceChild(span({
-						"id" : "update-link",
+						"id" : "update-sdk-link",
 						"style" : "padding-left:15px;"
 					}, "Installing..."), updateLink);
 				}
@@ -146,9 +146,9 @@ SDKUpdates = Class.create({
 	 */
 	checkForUpdates : function(e) {
 		if( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
-			console.log("Dispatching the 'checkForUpdate' action on the 'portal.titanium.update' controller...");
+			console.log("Dispatching the 'checkForUpdate' action on the 'portal.titanium.sdk.update' controller...");
 			dispatch($H({
-				controller : 'portal.titanium.update',
+				controller : 'portal.titanium.sdk.update',
 				action : "checkForUpdate"
 			}).toJSON());
 		}

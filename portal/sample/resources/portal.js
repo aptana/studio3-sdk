@@ -2,8 +2,16 @@
  * This script manages the portal observer-observable event mechanism.
  */
 // Constants
-var Events = {RECENT_FILES : 'recentFiles', MOBILE_SDK : 'mobileSDK', TITANIUM_SDK : 'titaniumSDK', 
-              SAMPLES : 'samples', TEMPLATES : 'templates'};
+
+var Events = {
+  RECENT_FILES : 'recentFiles',
+  MOBILE_SDK : 'mobileSDK',
+  TITANIUM_SDK : 'titaniumSDK',
+  TITANIUM_STUDIO_UPDATE : 'studioUpdate',
+  SAMPLES : 'samples',
+  TEMPLATES : 'templates'
+};
+
 // Creates the eventsDispatcher which contains the notify() function.
 // IMPORTANT! The Studio expects the observable to be called 'eventsDispatcher', and 
 // expects the eventsDispatcher function to be called 'notify()'. Do not change these names.
@@ -24,6 +32,7 @@ var Portal = Class.create({
     this.samples = new Samples();
     this.user = new User();
     this.sdkUpdates = new SDKUpdates();
+    this.tiStudioUpdates = new TiStudioUpdates();
     this.configurations = new Configurations();
     this.sdks = new MobileSDK();
     this.modules = new Modules();
@@ -37,6 +46,7 @@ var Portal = Class.create({
     this.samples.render();
     this.user.render();
     this.sdkUpdates.render();
+    this.tiStudioUpdates.render();
     this.configurations.render();
     this.sdks.render();
     this.modules.render();
@@ -47,6 +57,8 @@ var Portal = Class.create({
     eventsDispatcher.addObserver(Events.MOBILE_SDK, function(e) { portal.sdks.update(e); });
     // Add a Titanium SDKs observer to the dispatcher. Render the Titanium SDK update status on a 'mobileSDK' events.
     eventsDispatcher.addObserver(Events.TITANIUM_SDK, function(e) { portal.sdkUpdates.update(e); });
+    // Add a Titanium Studio update observer to the dispatcher. Render the Titanium Studio update status on a 'studioUpdate' events.
+    eventsDispatcher.addObserver(Events.TITANIUM_STUDIO_UPDATE, function(e) { portal.tiStudioUpdates.update(e); });
     // Add a Samples observer to the dispatcher. Can be used to render the Samples as they are added/removed.
     eventsDispatcher.addObserver(Events.SAMPLES, function(e) { portal.samples.update(e); });
     // Add a Templates observer to the dispatcher. Can be used to render the Templates as they are added/removed.
