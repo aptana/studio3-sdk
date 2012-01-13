@@ -1,29 +1,5 @@
+# Add methods to hash for use in this file...
 class Hash
-  def deep_symbolize_keys
-    dup.deep_symbolize_keys!
-  end
-
-  def deep_stringify_keys
-    dup.deep_stringify_keys!
-  end
-
-  def deep_symbolize_keys!
-    deep_change_keys!(:to_sym)
-  end
-
-  def deep_stringify_keys!
-    deep_change_keys!(:to_s)
-  end
-
-  def deep_change_keys!(change_method = :to_s)
-    self.keys.each do |k|
-      new_key = k.send(change_method)
-      current_value = self.delete(k)
-      self[new_key] = current_value.is_a?(Hash) ? current_value.dup.deep_change_keys!(change_method) : current_value
-    end
-    self
-  end
-
   def deep_merge!(other_hash)
     replace(deep_merge(other_hash))
   end
@@ -37,16 +13,18 @@ class Hash
   end
 end
 
+# This script is expected to be passed a ruble root dir as an argument. It
+# then generates localized cache YML files for that ruble.
 if __FILE__ == $0
-  $: << '.'
+  $: << File.dirname(__FILE__)
   require 'ruble'
   include Ruble
 
   require 'yaml'
 
-  # TODO We got run. We need to load up the ruble against this fake API and then spit out the locale specific caches!
+  # We got run. We need to load up the ruble against this fake API and then spit out
+  # the locale specific caches!
   bundle_dir = ARGV.shift
-
   bundle_files = []
 
   # check for a top-level bundle.rb file
@@ -78,15 +56,17 @@ if __FILE__ == $0
   end
 
   # Ok we've gathered up all the files we need to load...
+  $: << File.join(bundle_dir, "lib")
   bundle_files.each {|file| load file }
-  $bundles.first.add_children($commands)
-  $bundles.first.add_children($snippets)
-  $bundles.first.add_children($envs)
-  $bundles.first.add_children($templates)
-  $bundles.first.add_children($project_templates)
-  $bundles.first.add_children($content_assists)
+  bundle = $bundles.first
+  bundle.add_children($commands)
+  bundle.add_children($snippets)
+  bundle.add_children($envs)
+  bundle.add_children($templates)
+  bundle.add_children($project_templates)
+  bundle.add_children($content_assists)
 
-  # Bundle has been loaded. Now we need to spit out cache files.
+  # Bundle has been loaded. Now we need to spit out cache files. Dump to YAML string
   serialized = YAML::dump($bundles.first)
 
   # do some regexp replacements for the class/tag names!
@@ -105,26 +85,31 @@ if __FILE__ == $0
   if File.exist?(locales_dir)
     Dir.new(locales_dir).each {|file| locale_files << File.join(locales_dir, file) if file.end_with? '.yml' }
   end
-  # Load up all translations into one hash
-  locale_files.each do |locale_file|
-    data = YAML.load_file(locale_file)
-    data.each do |locale, d|
+
+  if locale_files.empty?
+    # Just spit out a run of the mill cache file without language specified (probably en_US)
+    File.open(File.join(bundle_dir, "cache.yml"), 'w') {|f| f.write(serialized) }
+  else
+    # Load up all translations into one hash
+    locale_files.each do |locale_file|
+      data = YAML.load_file(locale_file)
+      data.each do |locale, d|
       translations[locale] ||= {}
-      # d = d.deep_symbolize_keys
-      translations[locale].deep_merge!(d)
+        translations[locale].deep_merge!(d)
+      end
     end
-  end
-  # Now go through and export out the translated cache files
-  translations.each do |locale, d|
-    # Replace the display names with the translated strings
-    localized_yaml = serialized.gsub(/^(\s*)(display|command)Name: (\S+)$/) do |match|
-      # First try current locale, then en_US, then en, then use key as string
-      translated = d[$3]
-      translated = translations['en_US'][$3] if !translated && translations['en_US']
-      translated = translations['en'][$3] if !translated && translations['en']
-      translated = $3 if !translated
-      "#{$1}#{$2}Name: #{translated}"
+    # Now go through and export out the translated cache files
+    translations.each do |locale, d|
+      # Replace the display names with the translated strings
+      localized_yaml = serialized.gsub(/^(\s*)(display|command)Name: (\S+)$/) do |match|
+        # First try current locale, then en_US, then en, then use key as string
+        translated = d[$3]
+        translated = translations['en_US'][$3] if !translated && translations['en_US']
+        translated = translations['en'][$3] if !translated && translations['en']
+        translated = $3 if !translated
+        "#{$1}#{$2}Name: #{translated}"
+      end
+      File.open(File.join(bundle_dir, "cache.#{locale}.yml"), 'w') {|f| f.write(localized_yaml) }
     end
-    File.open(File.join(bundle_dir, "cache.#{locale}.yml"), 'w') {|f| f.write(localized_yaml) }
   end
 end
