@@ -1,7 +1,7 @@
 require 'ruble/command'
 
 module Ruble
-  class ContentAssist < Ruble::Command
+  class ContentAssist < Command
     def to_yaml_type
       "!content_assist"
     end

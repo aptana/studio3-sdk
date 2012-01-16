@@ -3,7 +3,7 @@ require 'ruble/command'
 $snippets ||= []
 
 module Ruble
-  class Snippet < Ruble::Command
+  class Snippet < Command
     attr_accessor :expansion
 
     def initialize(name, path)

@@ -1,5 +1,7 @@
+require 'ruble/command'
+
 module Ruble
-  class Template < Ruble::Command
+  class Template < Command
     attr_writer :filetype
     
     def initialize(name, path)
