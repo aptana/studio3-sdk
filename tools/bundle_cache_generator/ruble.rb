@@ -6,6 +6,7 @@ $snippets ||= []
 $envs ||= []
 $templates ||= []
 $project_templates ||= []
+$project_samples ||= []
 $content_assists ||= []
 $translations ||= []
 

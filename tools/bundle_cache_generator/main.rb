@@ -64,6 +64,7 @@ if __FILE__ == $0
   bundle.add_children($envs)
   bundle.add_children($templates)
   bundle.add_children($project_templates)
+  bundle.add_children($project_samples)
   bundle.add_children($content_assists)
 
   # Bundle has been loaded. Now we need to spit out cache files. Dump to YAML string
@@ -101,13 +102,13 @@ if __FILE__ == $0
     # Now go through and export out the translated cache files
     translations.each do |locale, d|
       # Replace the display names with the translated strings
-      localized_yaml = serialized.gsub(/^(\s*)(display|command)Name: (\S+)$/) do |match|
+      localized_yaml = serialized.gsub(/^(\s*)(display|command)Name: ['"]?(\S+?)['"]?$/) do |match|
         # First try current locale, then en_US, then en, then use key as string
         translated = d[$3]
         translated = translations['en_US'][$3] if !translated && translations['en_US']
         translated = translations['en'][$3] if !translated && translations['en']
         translated = $3 if !translated
-        "#{$1}#{$2}Name: #{translated}"
+        "#{$1}#{$2}Name: #{translated.inspect}"
       end
       File.open(File.join(bundle_dir, "cache.#{locale}.yml"), 'w') {|f| f.write(localized_yaml) }
     end

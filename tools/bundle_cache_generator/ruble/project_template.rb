@@ -1,6 +1,6 @@
 module Ruble
   class ProjectTemplate
-    attr_writer :location, :description, :id
+    attr_writer :location, :description, :id, :icon
 
     def initialize(name, path)
       @displayName = name
