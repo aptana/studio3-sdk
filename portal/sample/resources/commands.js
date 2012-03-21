@@ -15,7 +15,8 @@ Commands = Class.create({
 					tr(td(elm5 = a({'href' : '#'}, "Command #5 - Open a 'New Titanium Desktop Project' wizard"))),
 					tr(td(elm6 = a({'href' : '#'}, "Command #6 - Open a 'New Titanium Mobile Project' wizard"))),
 					tr(td(elm7 = a({'href' : '#'}, "Command #7 - Open a 'New Titanium Mobile Project from 'Geolocation mobile client' template' wizard"))),
-					tr(td(elm8 = a({'href' : '#'}, "Command #8 - Open a 'New Web Project from 'Basic Web Template' template' wizard")))
+					tr(td(elm8 = a({'href' : '#'}, "Command #8 - Open a 'New Web Project from 'Basic Web Template' template' wizard"))),
+					tr(td(elm9 = a({'href' : '#'}, "Command #9 - Open a preference page")))
         	  ));
             viewExampleDiv.appendChild(commands);
             // Observe and report selection changes for this item
@@ -128,7 +129,7 @@ Commands = Class.create({
                 return false;
             });
             
-                        // Observe and report selection changes for this item
+            // Observe and report selection changes for this item
             // NOTES: 
             // -- This one is a command with parameters
             // -- "com.appcelerator.titanium.mobile.project_wizard" - Titanium Studio Mobile project wizard ID
@@ -141,6 +142,20 @@ Commands = Class.create({
                         controller : 'portal.commands',
                         action : "execute",
                         args : ["com.aptana.portal.ui.command.newProjectFromTemplate", {"newWizardId" : "com.aptana.ui.wizards.NewWebProject", "projectTemplateId" : "com.aptana.project.template.web.basic"}].toJSON()
+                    }).toJSON());
+                }
+                return false;
+            });
+            
+            // Open a Preference page
+            elm9.observe('click', function(e) {
+                inputElement = e.element();
+                if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
+                    console.log("Dispatching the 'execute' action (with parameters) on the 'portal.commands' controller...");
+                    dispatch($H({
+                        controller : 'portal.commands',
+                        action : "execute",
+                        args : ["org.eclipse.ui.window.preferences", {"preferencePageId" : "org.eclipse.ui.browser.preferencePage"}].toJSON()
                     }).toJSON());
                 }
                 return false;
