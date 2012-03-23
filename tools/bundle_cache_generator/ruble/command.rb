@@ -7,6 +7,9 @@ module Ruble
       @workingDirectoryType = 'UNDEFINED'
       @async = false
       @input = ['none']
+
+      bundle = $bundles.last
+      bundle.apply_defaults(self) unless bundle.nil?
     end
 
     def trigger=(trigger)

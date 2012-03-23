@@ -4,6 +4,9 @@ module Ruble
     def initialize(name, path)
       @displayName = name
       @path = path
+
+      bundle = $bundles.last
+      bundle.apply_defaults(self) unless bundle.nil?
     end
 
     def command(name)

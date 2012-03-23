@@ -136,6 +136,12 @@ module Ruble
       children.each {|c| @children << c }
     end
 
+    def defaults
+      value_hashes = @@defaults[path.to_sym]
+
+      (value_hashes.nil? || value_hashes.length == 0) ? {} : value_hashes[-1]
+    end
+
     def pop_defaults
       value_hashes = @@defaults[@path.to_sym]
 
@@ -149,6 +155,18 @@ module Ruble
         @@defaults[@path.to_sym] = [defaults]
       else
       value_hashes.push((value_hashes.length == 0) ? defaults : value_hashes[-1].merge(defaults))
+      end
+    end
+
+    def apply_defaults(obj)
+      if obj.nil? == false
+        defaults.each do |k,v|
+          property = "#{k.to_s}=".to_sym
+
+          if obj.respond_to?(property)
+            obj.send(property, v)
+          end
+        end
       end
     end
 
@@ -185,4 +203,3 @@ module Ruble
     bundle.pop_defaults
   end
 end
-
