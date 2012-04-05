@@ -8,7 +8,7 @@ $templates ||= []
 $project_templates ||= []
 $project_samples ||= []
 $content_assists ||= []
-$translations ||= []
+$translations ||= {}
 
 # Load all the files underneath 'ruble' subdir
 ruble_dir = File.join(File.dirname(__FILE__), 'ruble')

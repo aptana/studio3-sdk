@@ -13,6 +13,43 @@ class Hash
   end
 end
 
+# This will replace the string with the locale specific translation, including interpolating variables.
+# this method will recursively translate any variable values as well.
+def replace_with_translation(translations, d, string)
+  string.gsub(/['"]?(@#(.+?);>(.+?)@#)['"]?/) do |match|
+    # split key into actual localized key and 'unique' segment for variable interpolation
+    orig_translation_key, translation_key, variables_hash_id = $1, $2, $3
+    #puts "Unique key to translate: #{orig_translation_key}"
+    #puts "Actual localized key to translate: #{translation_key}"
+
+    # First try current locale, then en_US, then en, then use key as string
+    translated = d[translation_key]
+    translated = translations['en_US'][translation_key] if !translated && translations['en_US']
+    translated = translations['en'][translation_key] if !translated && translations['en']
+    translated = translation_key if !translated
+
+    # Now inject the variables into translation!
+    translation_variables = $translations[orig_translation_key]
+    if !translation_variables.nil? and !translation_variables.empty?
+      #puts "String before interpolation: #{translated}"
+      # Recursively translate any values
+      translation_variables.each do |key, value|
+        translated_key = replace_with_translation(translations, d, value)
+        # Strip off excess quotes around translated values!
+        translated_key = translated_key[0..-2] if translated_key.end_with? '"'
+        translated_key = translated_key[0..-2] if translated_key.end_with? "'"
+        translated_key = translated_key[1..-1] if translated_key.start_with? '"'
+        translated_key = translated_key[1..-1] if translated_key.start_with? "'"
+        translation_variables[key] = translated_key
+      end
+      #puts "Variables to interpolate: #{translation_variables}"
+      translated = Ruble.interpolate(translated, translation_variables)
+    end
+    #puts "Final translated string: #{translated}"
+    "#{translated.inspect}"
+  end
+end
+
 # This script is expected to be passed a ruble root dir as an argument. It
 # then generates localized cache YML files for that ruble.
 if __FILE__ == $0
@@ -79,7 +116,7 @@ if __FILE__ == $0
   # Fix busted output for ` in smart typing pairs
   serialized.gsub!("- `", '- "`"')
 
-  # Load up the available translations and inject them into the YAML for displayName and commandName properties
+  # Load up the available translations and inject them into the YAML anything needing translations
   translations = {}
   locale_files = []
   locales_dir = File.join(bundle_dir, "config", 'locales')
@@ -95,21 +132,13 @@ if __FILE__ == $0
     locale_files.each do |locale_file|
       data = YAML.load_file(locale_file)
       data.each do |locale, d|
-      translations[locale] ||= {}
+        translations[locale] ||= {}
         translations[locale].deep_merge!(d)
       end
     end
     # Now go through and export out the translated cache files
     translations.each do |locale, d|
-      # Replace the display names with the translated strings
-      localized_yaml = serialized.gsub(/^(\s*)(display|command)Name: ['"]?(\S+?)['"]?$/) do |match|
-        # First try current locale, then en_US, then en, then use key as string
-        translated = d[$3]
-        translated = translations['en_US'][$3] if !translated && translations['en_US']
-        translated = translations['en'][$3] if !translated && translations['en']
-        translated = $3 if !translated
-        "#{$1}#{$2}Name: #{translated.inspect}"
-      end
+      localized_yaml = replace_with_translation(translations, d, serialized)
       File.open(File.join(bundle_dir, "cache.#{locale}.yml"), 'w') {|f| f.write(localized_yaml) }
     end
   end
