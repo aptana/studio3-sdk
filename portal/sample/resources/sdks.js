@@ -119,6 +119,18 @@ MobileSDK = Class.create({
 						td(androidVersionInfo["shouldUpdateAddOns"])
 					),
 					tr(
+						td("Installed API-Levels: "), 
+						td(androidVersionInfo["installedAPILevels"])
+					),
+					tr(
+						td("Required API-Levels: "),
+						td(androidVersionInfo["requiredAPILevels"])
+					), 
+					tr(
+						td("Needs API-Levels Update: "), 
+						td(androidVersionInfo["shouldUpdateAPILevels"])
+					),
+					tr(
 						td("SDK-Tools URL: "), 
 						td(androidVersionInfo["sdkURL"])
 					),
