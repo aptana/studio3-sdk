@@ -9,7 +9,7 @@
     metadata file. If there are no values for the propety, then "" is emitted
     as its value.
 
-    To run this script on a Mac or *nix machine, use somethign like the
+    To run this script on a Mac or *nix machine, use something like the
     following:
 
         xsltproc emit-css.xsl css_metadata.xml > from-metadata.css 
@@ -43,11 +43,13 @@
 	<xsl:choose>
 		<xsl:when test="count(values/value) > 0">
 			<xsl:for-each select="values/value">
-				<xsl:text>&#x09;</xsl:text>
-				<xsl:value-of select="../../@name"/>
-				<xsl:text>: </xsl:text>
-				<xsl:value-of select="@name"/>
-				<xsl:text>;&#x0A;</xsl:text>
+				<xsl:if test="@name != '*'">
+					<xsl:text>&#x09;</xsl:text>
+					<xsl:value-of select="../../@name"/>
+					<xsl:text>: </xsl:text>
+					<xsl:value-of select="@name"/>
+					<xsl:text>;&#x0A;</xsl:text>
+				</xsl:if>
 			</xsl:for-each>
 		</xsl:when>
 		<xsl:otherwise>
