@@ -77,6 +77,9 @@ public class Main
 	}
 
 	/**
+	 * Pass in one or more files as arguments. There are some sample files being collected in the top-level "samples"
+	 * directory in this project.
+	 * 
 	 * @param args
 	 * @throws Exception
 	 */
