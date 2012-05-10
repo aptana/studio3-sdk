@@ -4,8 +4,8 @@ Modules = Class.create({
    */
   render : function() {
     modulesDiv = $('modules');
-    with(Elements.Builder) {
-      if( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
+    with (Elements.Builder) {
+      if ( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
         console.log("Dispatching the 'getMobileModules' action on the 'portal.titanium.modules' controller...");
         mobileModules = dispatch($H({
           controller : 'portal.titanium.modules',
@@ -24,12 +24,12 @@ Modules = Class.create({
         */
 
         // Fill the GLOBAL modules table
-        mobileGlobalModulesTable = table({
+        var mobileGlobalModulesTable = table({
           "border" : "1",
           "style" : "border-collapse:collapse"
         }, modulesTBody = tbody(tr(th("Name"), th("Platforms"), th("Versions"), th("Type"))));
         var globalModules = mobileModules["global_modules"];
-        for(var i = 0; i < globalModules.length; i++) {
+        for (var i = 0; i < globalModules.length; i++) {
           var module = globalModules[i];
           modulesTBody.appendChild(tr(td(module["name"]), td(this.asCommaSeparatedList(module["platforms"])), td(this.asCommaSeparatedList(module["versions"])), td(module["type"])));
         }
@@ -38,14 +38,14 @@ Modules = Class.create({
         modulesDiv.appendChild(br());
 
         // Fill the PROJECT's modules table
-        mobileProjectModulesTable = table({
+        var mobileProjectModulesTable = table({
           "border" : "1",
           "style" : "border-collapse:collapse"
         }, modulesTBody = tbody(tr(th("Project"), th("Module Name"), th("Platforms"), th("Versions"), th("Type"))));
         var projectModules = mobileModules["project_modules"];
-        for(var v in projectModules) {
+        for (var v in projectModules) {
           var modules = projectModules[v];
-          for(var i = 0; i < modules.length; i++) {
+          for (var i = 0; i < modules.length; i++) {
             var module = modules[i];
             modulesTBody.appendChild(tr(td(v), td(module["name"]), td(this.asCommaSeparatedList(module["platforms"])), td(this.asCommaSeparatedList(module["versions"])), td(module["type"])));
           }
@@ -55,30 +55,54 @@ Modules = Class.create({
         modulesDiv.appendChild(br());
 
         console.log("Dispatching the 'getDesktopModules' action on the 'portal.titanium.modules' controller...");
-        desktopModules = dispatch($H({
+        var desktopModules = dispatch($H({
           controller : 'portal.titanium.modules',
           action : "getDesktopModules"
         }).toJSON()).evalJSON();
         // Fill the DESKTOP's modules table
-        desktopModulesTable = table({
+        var desktopModulesTable = table({
           "border" : "1",
           "style" : "border-collapse:collapse"
         }, modulesTBody = tbody(tr(th("Version"), th("Modules"))));
-        for(var v in desktopModules) {
+        for (var v in desktopModules) {
           var modules = desktopModules[v];
           modulesTBody.appendChild(tr(td(v), td(this.asCommaSeparatedList(modules))));
         }
         modulesDiv.appendChild(div("Desktop Modules"));
         modulesDiv.appendChild(desktopModulesTable);
+
+        // Module installation
+        modulesDiv.appendChild(br());
+        modulesDiv.appendChild(div(b("Install/Update module from url: "), moduleURL = input({
+          'type' : 'text',
+          'name' : 'moduleUrl',
+          'value' : '',
+          'size' : '50'
+        }), moduleInstallButton = button({
+          'type' : 'button'
+        }, "Install!")));
+        moduleInstallButton.observe('click', function(e) {
+          if ( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
+            console.log("Dispatching the 'installModule' action on the 'portal.titanium.modules' controller with arg " + moduleURL.value + "...");
+            var response = dispatch($H({
+              controller : 'portal.titanium.modules',
+              action : "installModule",
+              args : '["' + moduleURL.value + '"]'
+            }).toJSON());
+
+            console.log("Response from the 'installModule' action: " + response);
+          }
+          return false;
+        });
       }
     }
   },
   asCommaSeparatedList : function(obj) {
     var n, v, json = [];
-    for(n in obj) {
+    for (n in obj) {
       v = obj[n];
       t = typeof (v);
-      if(t == "string") {
+      if (t == "string") {
         v = '"' + v + '"';
         json.push(String(v));
       }
