@@ -9,7 +9,8 @@ var Events = {
   TITANIUM_SDK : 'titaniumSDK',
   TITANIUM_STUDIO_UPDATE : 'studioUpdate',
   SAMPLES : 'samples',
-  TEMPLATES : 'templates'
+  TEMPLATES : 'templates',
+  PROJECT : 'project'
 };
 
 // Creates the eventsDispatcher which contains the notify() function.
@@ -63,6 +64,8 @@ var Portal = Class.create({
     eventsDispatcher.addObserver(Events.SAMPLES, function(e) { portal.samples.update(e); });
     // Add a Templates observer to the dispatcher. Can be used to render the Templates as they are added/removed.
     eventsDispatcher.addObserver(Events.TEMPLATES, function(e) { portal.templates.update(e); });
+    // Add a Projects observer to the dispatcher. Can be used to render or notify when a project is created.
+    eventsDispatcher.addObserver(Events.PROJECT, function(e) { portal.commands.projectChange(e); });
   }
 });
 

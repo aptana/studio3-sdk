@@ -116,6 +116,8 @@ Commands = Class.create({
             // -- This one is a command with parameters
             // -- "com.appcelerator.titanium.mobile.project_wizard" - Titanium Studio Mobile project wizard ID
             // -- "com.aptana.project.templates.mobile.geos" - Built in template for mobile projects
+            // -- The dispatch is being called with a Events.PROJECT event ID that will be used by the framework to notify
+            //    the portal after the project is created. The notification will provide a project name.
             elm7.observe('click', function(e) {
                 inputElement = e.element();
                 if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
@@ -123,7 +125,7 @@ Commands = Class.create({
                     dispatch($H({
                         controller : 'portal.commands',
                         action : "execute",
-                        args : ["com.aptana.portal.ui.command.newProjectFromTemplate", {"newWizardId" : "com.appcelerator.titanium.mobile.project_wizard", "projectTemplateId" : "com.appcelerator.titanium.project.template.mobile.geo"}].toJSON()
+                        args : ["com.aptana.portal.ui.command.newProjectFromTemplate", {"newWizardId" : "com.appcelerator.titanium.mobile.project_wizard", "projectTemplateId" : "com.appcelerator.titanium.project.template.mobile.geo"}, Events.PROJECT].toJSON()
                     }).toJSON());
                 }
                 return false;
@@ -134,6 +136,8 @@ Commands = Class.create({
             // -- This one is a command with parameters
             // -- "com.appcelerator.titanium.mobile.project_wizard" - Titanium Studio Mobile project wizard ID
             // -- "com.aptana.project.templates.html.basic" - Built in template for mobile projects
+            // -- The dispatch is being called with a Events.PROJECT event ID that will be used by the framework to notify
+            //    the portal after the project is created. The notification will provide a project name.
             elm8.observe('click', function(e) {
                 inputElement = e.element();
                 if (typeof(console) !== 'undefined' && typeof(dispatch) !== 'undefined') {
@@ -141,7 +145,7 @@ Commands = Class.create({
                     dispatch($H({
                         controller : 'portal.commands',
                         action : "execute",
-                        args : ["com.aptana.portal.ui.command.newProjectFromTemplate", {"newWizardId" : "com.aptana.ui.wizards.NewWebProject", "projectTemplateId" : "com.aptana.project.template.web.basic"}].toJSON()
+                        args : ["com.aptana.portal.ui.command.newProjectFromTemplate", {"newWizardId" : "com.aptana.ui.wizards.NewWebProject", "projectTemplateId" : "com.aptana.project.template.web.basic"}, Events.PROJECT].toJSON()
                     }).toJSON());
                 }
                 return false;
@@ -161,5 +165,9 @@ Commands = Class.create({
                 return false;
             });
         }
+    }, 
+    
+    projectChange : function(e) {
+      alert("Project: " + $H(e).inspect());
     }
 });
