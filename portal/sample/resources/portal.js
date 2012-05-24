@@ -30,6 +30,7 @@ var Portal = Class.create({
     this.templates = new Templates();
     this.browserInteractions = new Browser();
     this.recentFiles = new RecentFiles();
+    this.themes = new Themes();
     this.samples = new Samples();
     this.user = new User();
     this.sdkUpdates = new SDKUpdates();
@@ -44,6 +45,7 @@ var Portal = Class.create({
     this.templates.render();
     this.browserInteractions.render();
     this.recentFiles.render();
+    this.themes.render();
     this.samples.render();
     this.user.render();
     this.sdkUpdates.render();
