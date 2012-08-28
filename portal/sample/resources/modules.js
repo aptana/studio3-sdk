@@ -3,11 +3,11 @@ Modules = Class.create({
    * Render the items that will display the Titanium-User information
    */
   render : function() {
-    modulesDiv = $('modules');
+    var modulesDiv = $('modules');
     with (Elements.Builder) {
       if ( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
         console.log("Dispatching the 'getMobileModules' action on the 'portal.titanium.modules' controller...");
-        mobileModules = dispatch($H({
+        var mobileModules = dispatch($H({
           controller : 'portal.titanium.modules',
           action : "getMobileModules"
         }).toJSON()).evalJSON();
@@ -108,5 +108,17 @@ Modules = Class.create({
       }
     }
     return ("[" + String(json) + "]" );
+  },
+  // Accepts an update that was triggered by a browser-notification when the modules were changed.
+  // In this case, we redraw the modules list.
+  update : function(e) {
+    if ( typeof (console) !== 'undefined') {
+      console.log("The modules were changed. Redrawing the modules list...");
+      var node = $('modules');
+      while (node.hasChildNodes()) {
+        node.removeChild(node.lastChild);
+      }
+      this.render();
+    }
   }
 });

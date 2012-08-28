@@ -10,7 +10,8 @@ var Events = {
   TITANIUM_STUDIO_UPDATE : 'studioUpdate',
   SAMPLES : 'samples',
   TEMPLATES : 'templates',
-  PROJECT : 'project'
+  PROJECT : 'project',
+  MODULES : 'modules'
 };
 
 // Creates the eventsDispatcher which contains the notify() function.
@@ -85,6 +86,10 @@ var Portal = Class.create({
     // Add a Projects observer to the dispatcher. Can be used to render or notify when a project is created.
     eventsDispatcher.addObserver(Events.PROJECT, function(e) {
       portal.commands.projectChange(e);
+    });
+    // Add a Modules observer to the dispatcher. Can be used to render or notify when a module is installed.
+    eventsDispatcher.addObserver(Events.MODULES, function(e) {
+      portal.modules.update(e);
     });
   }
 });
