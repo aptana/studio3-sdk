@@ -6,6 +6,9 @@ Browser = Class.create({
     // Get the div for the Open-View example
     projectSamplesDiv = $('browserInteractions');
     with (Elements.Builder) {
+      var defaultBrowserLink = a({
+        'href' : '#'
+      }, "Open a link in the default Studio browser");
       var internalLink = a({
         'href' : '#'
       }, "Open a link internally");
@@ -19,6 +22,8 @@ Browser = Class.create({
         'href' : '#'
       }, "Show Currently Configured Browsers");
 
+      projectSamplesDiv.appendChild(defaultBrowserLink);
+      projectSamplesDiv.appendChild(br());
       projectSamplesDiv.appendChild(internalLink);
       projectSamplesDiv.appendChild(br());
       projectSamplesDiv.appendChild(externalLink);
@@ -27,6 +32,20 @@ Browser = Class.create({
       projectSamplesDiv.appendChild(configureLink);
       projectSamplesDiv.appendChild(br());
       projectSamplesDiv.appendChild(getConfiguredLink);
+
+      // listen to clicks
+      defaultBrowserLink.observe('click', function(e) {
+        inputElement = e.element();
+        if ( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
+          console.log("Dispatching the 'openURL' action on the 'portal.browser' controller...");
+          dispatch($H({
+            controller : 'portal.browser',
+            action : "openURL",
+            args : ["http://www.appcelerator.com"].toJSON()
+          }).toJSON());
+        }
+        return false;
+      });
 
       // listen to clicks
       internalLink.observe('click', function(e) {
