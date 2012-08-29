@@ -3,8 +3,26 @@ Browser = Class.create({
    * Render the items for the browser interactions
    */
   render : function() {
+
+    // Render the Controller-Actions available for the "portal.browser" controller.
+    var browserActionsDiv = $('browserActions');
+
+    if ( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
+      console.log("Dispatching the 'listActions' action on the 'portal.browser' controller...");
+      var availableActions = dispatch($H({
+        controller : 'portal.browser',
+        action : "listActions"
+      }).toJSON()).evalJSON();
+      with (Elements.Builder) {
+        var actionsTable = table( actionsBody = tbody());
+        for (var i = 0; i < availableActions.length; i++) {
+          actionsBody.appendChild(tr(td(availableActions[i])));
+        }
+        browserActionsDiv.appendChild(actionsTable);
+      }
+    }
     // Get the div for the Open-View example
-    projectSamplesDiv = $('browserInteractions');
+    var browserInteractionsDiv = $('browserInteractions');
     with (Elements.Builder) {
       var defaultBrowserLink = a({
         'href' : '#'
@@ -22,16 +40,16 @@ Browser = Class.create({
         'href' : '#'
       }, "Show Currently Configured Browsers");
 
-      projectSamplesDiv.appendChild(defaultBrowserLink);
-      projectSamplesDiv.appendChild(br());
-      projectSamplesDiv.appendChild(internalLink);
-      projectSamplesDiv.appendChild(br());
-      projectSamplesDiv.appendChild(externalLink);
-      projectSamplesDiv.appendChild(br());
-      projectSamplesDiv.appendChild(br());
-      projectSamplesDiv.appendChild(configureLink);
-      projectSamplesDiv.appendChild(br());
-      projectSamplesDiv.appendChild(getConfiguredLink);
+      browserInteractionsDiv.appendChild(defaultBrowserLink);
+      browserInteractionsDiv.appendChild(br());
+      browserInteractionsDiv.appendChild(internalLink);
+      browserInteractionsDiv.appendChild(br());
+      browserInteractionsDiv.appendChild(externalLink);
+      browserInteractionsDiv.appendChild(br());
+      browserInteractionsDiv.appendChild(br());
+      browserInteractionsDiv.appendChild(configureLink);
+      browserInteractionsDiv.appendChild(br());
+      browserInteractionsDiv.appendChild(getConfiguredLink);
 
       // listen to clicks
       defaultBrowserLink.observe('click', function(e) {
