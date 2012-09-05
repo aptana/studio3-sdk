@@ -17,11 +17,13 @@ User = Class.create({
 				}, tbody(
 					tr(
 						th("ID"), 
+						th("GUID"), 
 						th("Name"), 
 						th("Email"), 
 						th("Image")), 
 					tr(
 						td(userInfo["id"]), 
+						td(userInfo["guid"]), 
 						td(userInfo["name"]), 
 						td(userInfo["email"]), 
 						td(img({"src" : "http://www.gravatar.com/avatar/" + userInfo["hash"]}))
