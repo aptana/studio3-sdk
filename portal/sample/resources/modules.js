@@ -1,3 +1,8 @@
+var TARGETS = {
+  GLOBAL_MODULES : 'global_modules',
+  PROJECT_MODULES : 'project_modules'
+};
+
 Modules = Class.create({
   /**
    * Render the items that will display the Titanium-User information
@@ -72,8 +77,21 @@ Modules = Class.create({
         modulesDiv.appendChild(desktopModulesTable);
 
         // Module installation
+        var targetSelect = select({
+          "id" : "targetSelect"
+        }, option("----"), option(TARGETS.GLOBAL_MODULES), option(TARGETS.PROJECT_MODULES));
+        var projectTargetSelect = select({
+          "id" : "projectTargetSelect"
+        });
+        var allProjects = dispatch($H({
+          controller : 'portal.resources',
+          action : "getProjects"
+        }).toJSON()).evalJSON();
+        for (var i = 0; i < allProjects.length; i++) {
+          projectTargetSelect.appendChild(option(allProjects[i]));
+        }
         modulesDiv.appendChild(br());
-        modulesDiv.appendChild(div(b("Install/Update module from url: "), moduleURL = input({
+        modulesDiv.appendChild(div(b("Target: "), targetSelect, b(" Project: "), projectTargetSelect, b(" Install/Update module from url: "), moduleURL = input({
           'type' : 'text',
           'name' : 'moduleUrl',
           'value' : '',
@@ -84,10 +102,20 @@ Modules = Class.create({
         moduleInstallButton.observe('click', function(e) {
           if ( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
             console.log("Dispatching the 'installModule' action on the 'portal.titanium.modules' controller with arg " + moduleURL.value + "...");
+            // prepare the arguments according to the target selections.
+            var arguments = '["' + moduleURL.value;
+            var targetSelectionValue = targetSelect.options[targetSelect.selectedIndex].text;
+            if (targetSelectionValue == TARGETS.GLOBAL_MODULES) {
+              arguments += "\", \"" + TARGETS.GLOBAL_MODULES + "\"]";
+            } else if (targetSelectionValue == TARGETS.PROJECT_MODULES) {
+              arguments += "\", \"" + TARGETS.PROJECT_MODULES + "\", \"" + projectTargetSelect.options[projectTargetSelect.selectedIndex].text + "\"]";
+            } else {
+              arguments += '"]';
+            }
             var response = dispatch($H({
               controller : 'portal.titanium.modules',
               action : "installModule",
-              args : '["' + moduleURL.value + '"]'
+              args : arguments
             }).toJSON());
 
             console.log("Response from the 'installModule' action: " + response);
