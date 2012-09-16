@@ -1,0 +1,49 @@
+{
+    "android": {
+        "linux": {
+            "requiredAddOns": ["addon.+google.+apis.+8"],
+            "requiredSDKTools": "14",
+            "requiredPlatformTools": "8",
+            "requiredPlatforms": ["Android\\s*2\\.2.*"],
+            "sdkURL": "http://dl.google.com/android/android-sdk_r20.0.3-linux.tgz"
+        },
+        "macosx": {
+            "requiredAddOns": ["addon.+google.+apis.+8"],
+            "requiredSDKTools": "14",
+            "requiredPlatformTools": "8",
+            "requiredPlatforms": ["Android\\s*2\\.2.*"],
+            "sdkURL": "http://dl.google.com/android/android-sdk_r20.0.3-macosx.zip"
+        },
+        "win32": {
+            "requiredAddOns": ["addon.+google.+apis.+8"],
+            "requiredSDKTools": "14",
+            "requiredPlatformTools": "8",
+            "requiredPlatforms": ["Android\\s*2\\.2.*"],
+            "sdkURL": "http://dl.google.com/android/android-sdk_r20.0.3-windows.zip",
+            "jdkURL": "http://titanium-studio.s3.amazonaws.com/jdk/jdk-6u25-windows-i586.exe"
+        }
+    },
+    "ios": {
+        "macosx": {
+            "requiredPlatforms": ["[4.0, 5.2)"],
+            "sdkURL": "http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12"
+        }
+    },
+    "mobileweb": {
+        "win32": {
+            "Firefox": ["[10.0, 30.0)"],
+            "InternetExplorer": ["[9.0, 30.0)"],
+            "Chrome": ["[10.0, 30.0)"],
+            "Safari": ["[5.0, 10.0)"]
+        },
+        "macosx": {
+            "Firefox": ["[10.0, 30.0)"],
+            "Chrome": ["[10.0, 30.0)"],
+            "Safari": ["[5.0, 10.0)"]
+        },
+        "linux": {
+            "Firefox": ["[10.0, 20.0)"],
+            "Chrome": ["[10.0, 20.0)"]
+        }
+    }
+}
