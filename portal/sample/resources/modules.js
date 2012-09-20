@@ -103,7 +103,7 @@ Modules = Class.create({
           if ( typeof (console) !== 'undefined' && typeof (dispatch) !== 'undefined') {
             console.log("Dispatching the 'installModule' action on the 'portal.titanium.modules' controller with arg " + moduleURL.value + "...");
             // prepare the arguments according to the target selections.
-            var arguments = '["' + moduleURL.value;
+            var arguments = '["' + moduleURL.value.split(',');
             var targetSelectionValue = targetSelect.options[targetSelect.selectedIndex].text;
             if (targetSelectionValue == TARGETS.GLOBAL_MODULES) {
               arguments += "\", \"" + TARGETS.GLOBAL_MODULES + "\"]";
