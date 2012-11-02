@@ -32,11 +32,11 @@ Modules = Class.create({
         var mobileGlobalModulesTable = table({
           "border" : "1",
           "style" : "border-collapse:collapse"
-        }, modulesTBody = tbody(tr(th("Name"), th("ID"), th("Platforms"), th("Versions"), th("Type"))));
+        }, modulesTBody = tbody(tr(th("Name"), th("ID"), th("Platforms"), th("Versions"), th("Type"), th("GUID"))));
         var globalModules = mobileModules["global_modules"];
         for (var i = 0; i < globalModules.length; i++) {
           var module = globalModules[i];
-          modulesTBody.appendChild(tr(td(module["name"]), td(module["id"]), td(this.asCommaSeparatedList(module["platforms"])), td(this.asCommaSeparatedList(module["versions"])), td(module["type"])));
+          modulesTBody.appendChild(tr(td(module["name"]), td(module["id"]), td(this.asCommaSeparatedList(module["platforms"])), td(this.asCommaSeparatedList(module["versions"])), td(module["type"]), td(this.asCommaSeparatedList(module["guids"]))));
         }
         modulesDiv.appendChild(div("Global Mobile Modules"));
         modulesDiv.appendChild(mobileGlobalModulesTable);
@@ -46,13 +46,13 @@ Modules = Class.create({
         var mobileProjectModulesTable = table({
           "border" : "1",
           "style" : "border-collapse:collapse"
-        }, modulesTBody = tbody(tr(th("Project"), th("Module Name"), th("Module ID"), th("Platforms"), th("Versions"), th("Type"))));
+        }, modulesTBody = tbody(tr(th("Project"), th("Module Name"), th("Module ID"), th("Platforms"), th("Versions"), th("Type"), th("GUID"))));
         var projectModules = mobileModules["project_modules"];
         for (var v in projectModules) {
           var modules = projectModules[v];
           for (var i = 0; i < modules.length; i++) {
             var module = modules[i];
-            modulesTBody.appendChild(tr(td(v), td(module["name"]), td(module["id"]), td(this.asCommaSeparatedList(module["platforms"])), td(this.asCommaSeparatedList(module["versions"])), td(module["type"])));
+            modulesTBody.appendChild(tr(td(v), td(module["name"]), td(module["id"]), td(this.asCommaSeparatedList(module["platforms"])), td(this.asCommaSeparatedList(module["versions"])), td(module["type"]), td(this.asCommaSeparatedList(module["guids"]))));
           }
         }
         modulesDiv.appendChild(div("Project's Mobile Modules"));
